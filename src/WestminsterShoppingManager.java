@@ -38,22 +38,10 @@ public class WestminsterShoppingManager {
         }
 
     }
-    // save to notepad
-    // encode with serializable
-    // decode with deserializable
+
 
     private static void savefile() {
-        try {
-            FileOutputStream fileOutputStream = new FileOutputStream("shoppingCart.txt");
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            objectOutputStream.writeObject(shoppingCart);
-            objectOutputStream.close();
-            fileOutputStream.close();
-            System.out.println("saved successfully");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        //comment
     }
 
     private static void deleteProduct() {
