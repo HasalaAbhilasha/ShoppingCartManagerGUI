@@ -1,3 +1,6 @@
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.Scanner;
 
 public class WestminsterShoppingManager {
@@ -35,10 +38,22 @@ public class WestminsterShoppingManager {
         }
 
     }
+    // save to notepad
+    // encode with serializable
+    // decode with deserializable
 
     private static void savefile() {
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream("shoppingCart.txt");
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(shoppingCart);
+            objectOutputStream.close();
+            fileOutputStream.close();
+            System.out.println("saved successfully");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        // comment2
     }
 
     private static void deleteProduct() {
@@ -80,7 +95,6 @@ public class WestminsterShoppingManager {
 
     }
 
-    // comment
     private static void addProduct() {
         System.out.println("Choose the product type");
         System.out.println("1.Clothing");
