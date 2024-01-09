@@ -1,6 +1,7 @@
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class WestminsterShoppingManager {
@@ -8,40 +9,43 @@ public class WestminsterShoppingManager {
     private static Scanner input = new Scanner(System.in);
 
     public static void main(String[] args) {
-
-        while (true) {
-            System.out.println("1.Add Product");
-            System.out.println("2.remove Product");
-            System.out.println("3.display all Products");
-            System.out.println("4.save");
-            System.out.println("0.exit");
-            int number = input.nextInt();
-
-            switch (number) {
-                case 0:
-                    return;
-                case 1:
-                    addProduct();
-                    break;
-                case 2:
-                    deleteProduct();
-                    break;
-                case 3:
-                    displayProduct();
-                    break;
-                case 4:
-                    savefile();
-                    break;
-                default:
-                    System.out.println("wrong input");
+            while (true) {
+                System.out.println("1.Add Product");
+                System.out.println("2.remove Product");
+                System.out.println("3.display all Products");
+                System.out.println("4.save");
+                System.out.println("0.exit");
+                int number = input.nextInt();
+                switch (number) {
+                    case 0:
+                        return;
+                    case 1:
+                        addProduct();
+                        break;
+                    case 2:
+                        deleteProduct();
+                        break;
+                    case 3:
+                        displayProduct();
+                        break;
+                    case 4:
+                        savefile();
+                        break;
+                    default:
+                        System.out.println("wrong input");
+                }
+                return;
             }
         }
 
-    }
+
+
 
 
     private static void savefile() {
-        //comment
+        //save to notepad using serialization
+
+
     }
 
     private static void deleteProduct() {
