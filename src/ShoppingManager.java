@@ -1,8 +1,8 @@
 public interface ShoppingManager {
-    void AddProduct();
-    void DeleteProduct();
-    void DisplayProducts();
-    void SaveToFile();
+    void addProduct();
+    void deleteProduct();
+    void displayProducts();
+    void saveToFile();
 //    void LoadFromFile();
 
 

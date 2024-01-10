@@ -1,16 +1,20 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
-import java.io.IOException;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
 
-public class WestminsterShoppingManager implements ShoppingManager{
+public class WestminsterShoppingManager implements ShoppingManager {
+    // Scanner for user input
     public static Scanner input = new Scanner(System.in);
-    public static ShoppingCart shoppingCart = new ShoppingCart();
-    public static void main(String[] args) {
-        WestminsterShoppingManager westminsterShoppingManger = new WestminsterShoppingManager();
 
-        westminsterShoppingManger.LoadFromFile();
+    // Shopping cart instance
+    public static ShoppingCart shoppingCart = new ShoppingCart();
+
+    // Main method to interact with the user
+    public static void main(String[] args) {
+        WestminsterShoppingManager westminsterShoppingManager = new WestminsterShoppingManager();
+        westminsterShoppingManager.loadFromFile();
 
         int num;
         while (true) {
@@ -27,54 +31,52 @@ public class WestminsterShoppingManager implements ShoppingManager{
                 case 0:
                     return;
                 case 1:
-                    westminsterShoppingManger.AddProduct();
+                    westminsterShoppingManager.addProduct();
                     break;
                 case 2:
-                    westminsterShoppingManger.DeleteProduct();
+                    westminsterShoppingManager.deleteProduct();
                     break;
                 case 3:
-                    westminsterShoppingManger.DisplayProducts();
+                    westminsterShoppingManager.displayProducts();
                     break;
                 case 4:
-                    westminsterShoppingManger.SaveToFile();
+                    westminsterShoppingManager.saveToFile();
                     break;
                 case 5:
                     WestminsterShoppingCenter.main(null);
                     WestminsterShoppingCenter.main(args);
                     break;
                 default:
-                    System.out.println("Enter valid option");
+                    System.out.println("Enter a valid option");
             }
         }
     }
 
-
-    public void AddProduct() {
-        if(shoppingCart.getProductList().size()<=50){
-            Scanner input = new Scanner(System.in);
-            System.out.println("Chose the product type");
-            System.out.println("1 for Electronics");
-            System.out.println("2 for Clothing");
-
+    // Method to add a new product to the shopping cart
+    public void addProduct() {
+        if (shoppingCart.getProductList().size() <= 50) {
             int productType;
             int productItems;
             double price;
 
-            while(true){
+            while (true) {
+                System.out.println("Choose the product type");
+                System.out.println("1 for Electronics");
+                System.out.println("2 for Clothing");
+
                 productType = returnInt();
-                if (productType == 1 || productType == 2){
+                if (productType == 1 || productType == 2) {
                     break;
-                }else {
-                    System.out.print("Enter Valid option: ");
+                } else {
+                    System.out.print("Enter a valid option: ");
                     input.nextLine();
                 }
-
             }
 
             System.out.print("Product ID: ");
-            String productId =input.next();
+            String productId = input.next();
             System.out.print("Product Name: ");
-            String productName =input.next();
+            String productName = input.next();
             System.out.print("No. of items: ");
             productItems = returnInt();
             System.out.print("Price: ");
@@ -101,27 +103,28 @@ public class WestminsterShoppingManager implements ShoppingManager{
                     System.out.println("Product not found!");
                     break;
             }
-        }else {
-            System.out.println("You have entered the limit of 50 products!");
+        } else {
+            System.out.println("You have reached the limit of 50 products!");
         }
     }
-    public void DeleteProduct() {
 
-        DisplayProducts();
+    // Method to delete a product from the shopping cart
+    public void deleteProduct() {
+        displayProducts();
 
-        while(true){
-            System.out.println("Chose the product type");
+        while (true) {
+            System.out.println("Choose the product type");
             System.out.println("1 for Electronics");
             System.out.println("2 for Clothing :");
 
-            int productype =returnInt();
+            int productType = returnInt();
 
             System.out.println("Enter product ID");
-            String productId =input.next();
+            String productId = input.next();
 
             boolean deleted = false;
 
-            switch (productype){
+            switch (productType) {
                 case 1:
                     for (int i = 0; i < shoppingCart.getProductList().size(); i++) {
                         if (productId.equals(shoppingCart.getProductList().get(i).getProductId()) && "electronics".equals(shoppingCart.getProductList().get(i).getObjecttype())) {
@@ -133,7 +136,7 @@ public class WestminsterShoppingManager implements ShoppingManager{
                     break;
                 case 2:
                     for (int i = 0; i < shoppingCart.getProductList().size(); i++) {
-                        if (productId.equals(shoppingCart.getProductList().get(i).getProductId()) && "clothing".equals(shoppingCart.getProductList().get(i).getObjecttype())){
+                        if (productId.equals(shoppingCart.getProductList().get(i).getProductId()) && "clothing".equals(shoppingCart.getProductList().get(i).getObjecttype())) {
                             shoppingCart.getProductList().get(i).productDetails();
                             shoppingCart.deleteProduct(shoppingCart.getProductList().get(i));
                             deleted = true;
@@ -143,32 +146,34 @@ public class WestminsterShoppingManager implements ShoppingManager{
                 default:
                     System.out.println("Invalid product type!");
             }
-            if(deleted){
+
+            if (deleted) {
                 System.out.println("Product deleted successfully.");
                 System.out.println("Products remaining in the Cart: " + shoppingCart.getProductList().size());
-
                 break;
-            }else {
+            } else {
                 System.out.println("Product not found.");
             }
         }
     }
 
-    public void DisplayProducts() {
-        if(shoppingCart.getProductList().isEmpty()){
+    // Method to display products in the shopping cart
+    public void displayProducts() {
+        if (shoppingCart.getProductList().isEmpty()) {
             System.out.println("No products in the Cart.");
-        }else{
+        } else {
             for (int i = 0; i < shoppingCart.getProductList().size(); i++) {
                 System.out.println(shoppingCart.getProductList().get(i).productDetails());
             }
         }
     }
 
-    public void SaveToFile( )  {
+    // Method to save products to a file
+    public void saveToFile() {
         try {
             FileWriter myWriter = new FileWriter("savedProducts.txt");
             for (int i = 0; i < shoppingCart.getProductList().size(); i++) {
-                myWriter.write(shoppingCart.getProductList().get(i).productDetails()+"\n");
+                myWriter.write(shoppingCart.getProductList().get(i).productDetails() + "\n");
             }
             myWriter.close();
             System.out.println("Successfully wrote to the file.");
@@ -177,7 +182,8 @@ public class WestminsterShoppingManager implements ShoppingManager{
         }
     }
 
-    public static void LoadFromFile( ) {
+    // Method to load products from a file
+    public void loadFromFile() {
         try {
             File savedProducts = new File("savedProducts.txt");
             Scanner fileReader = new Scanner(savedProducts);
@@ -186,11 +192,11 @@ public class WestminsterShoppingManager implements ShoppingManager{
                 String[] data = dataLine.split("\\|");
 
                 if (data.length == 7) {
-                    if(data[6].equals("electronics")){
-                        Electronics electronics =new Electronics(data[0],data[1],Integer.parseInt(data[2]),Double.parseDouble(data[3]),data[6],data[4],Integer.parseInt(data[5]));
+                    if (data[6].equals("electronics")) {
+                        Electronics electronics = new Electronics(data[0], data[1], Integer.parseInt(data[2]), Double.parseDouble(data[3]), data[6], data[4], Integer.parseInt(data[5]));
                         shoppingCart.addProduct(electronics);
-                    }else if(data[6].equals("clothing")){
-                        Clothing clothing =new Clothing(data[0],data[1],Integer.parseInt(data[2]),Double.parseDouble(data[3]),data[6],data[4],data[5]);
+                    } else if (data[6].equals("clothing")) {
+                        Clothing clothing = new Clothing(data[0], data[1], Integer.parseInt(data[2]), Double.parseDouble(data[3]), data[6], data[4], data[5]);
                         shoppingCart.addProduct(clothing);
                     }
                 } else {
@@ -201,31 +207,32 @@ public class WestminsterShoppingManager implements ShoppingManager{
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
         }
-
     }
 
-    private static int returnInt(){
+    // Utility method to get an integer from user input
+    private static int returnInt() {
         int value;
-        while(true) {
-            try{
-                value =input.nextInt();
+        while (true) {
+            try {
+                value = input.nextInt();
                 break;
-            }catch (Exception e){
-                System.out.print("Enter valid value: ");
+            } catch (Exception e) {
+                System.out.print("Enter a valid value: ");
                 input.nextLine();
             }
         }
         return value;
     }
 
-    private static double returnDouble(){
+    // Utility method to get a double from user input
+    private static double returnDouble() {
         double value;
-        while(true) {
-            try{
-                value =input.nextDouble();
+        while (true) {
+            try {
+                value = input.nextDouble();
                 break;
-            }catch (Exception e){
-                System.out.print("Enter valid price: ");
+            } catch (Exception e) {
+                System.out.print("Enter a valid price: ");
                 input.nextLine();
             }
         }

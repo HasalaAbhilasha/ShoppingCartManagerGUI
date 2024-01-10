@@ -1,4 +1,3 @@
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -11,29 +10,42 @@ public class WestminsterShoppingCenter extends WestminsterShoppingManager {
 
     private static JTable table;
     private static String selectedValue;
+    private static JButton addToCartButton;
+    private static JButton exitButton;
+    private static JButton shoppingCartButton; // New button for shopping cart
+
+
+
     public static void main(String[] args) {
+        SwingUtilities.invokeLater(WestminsterShoppingCenter::createAndShowGUI);
+    }
+
+    private static void createAndShowGUI() {
+        // Create the main JFrame
         JFrame mainFrame = new JFrame("Westminster Shopping Center");
         mainFrame.setSize(800, 900);
+        mainFrame.setLayout(new GridLayout(3, 1));
+        shoppingCartButton = new JButton("Shopping Cart"); // Initialize shopping cart button
 
-        mainFrame.setLayout(new GridLayout(2, 1));
 
+        // Create panels
         JPanel panel1 = new JPanel(new GridLayout(2, 1));
         JPanel panel2 = new JPanel(new GridLayout(1, 3));
-
-        JPanel panel3 = new JPanel(new GridBagLayout()); // Centered GridBagLayout
-        JPanel panel4 = new JPanel(new GridBagLayout()); // Centered GridBagLayout
-        JPanel panel5 = new JPanel(new FlowLayout(FlowLayout.RIGHT)); // Centered GridBagLayout
-
+        JPanel panel3 = new JPanel(new GridBagLayout());
+        JPanel panel4 = new JPanel(new GridBagLayout());
+        JPanel panel5 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JPanel displayPanel = new JPanel();
         displayPanel.setLayout(new BoxLayout(displayPanel, BoxLayout.Y_AXIS));
 
+        // Create labels
         JLabel label1 = new JLabel("Select Product Category");
-
         JLabel displayLabel1 = new JLabel("Selected Product Details");
 
+        // Create empty border
         int marginSize = 10;
-        EmptyBorder emptyBorder = new EmptyBorder(marginSize, marginSize*2, marginSize, 0);
+        EmptyBorder emptyBorder = new EmptyBorder(marginSize, marginSize * 2, marginSize, 0);
 
+        // Create labels for displaying product details
         JLabel productIDLabel = new JLabel();
         JLabel categoryLabel = new JLabel();
         JLabel nameLabel = new JLabel();
@@ -41,6 +53,7 @@ public class WestminsterShoppingCenter extends WestminsterShoppingManager {
         JLabel miscLabel1 = new JLabel();
         JLabel miscLabel2 = new JLabel();
 
+        // Set empty borders for labels
         displayLabel1.setBorder(emptyBorder);
         productIDLabel.setBorder(emptyBorder);
         categoryLabel.setBorder(emptyBorder);
@@ -49,18 +62,19 @@ public class WestminsterShoppingCenter extends WestminsterShoppingManager {
         miscLabel1.setBorder(emptyBorder);
         miscLabel2.setBorder(emptyBorder);
 
-
-
-        String[] s1 = { "All", "Electronic", "Clothing"};
-        JComboBox<String> dropdown = new JComboBox<>(s1);
+        // Create dropdown menu
+        String[] categories = {"All", "Electronic", "Clothing"};
+        JComboBox<String> dropdown = new JComboBox<>(categories);
         dropdown.setPrototypeDisplayValue("XXXXXXXXXXXXXXXX");
 
-        System.out.println("before actionlistner - "+dropdown.getSelectedItem());
-
+        // Initialize selected value
         selectedValue = (String) dropdown.getSelectedItem();
 
-        JButton shoppingCartButton = new JButton("Shopping Cart");
+        // Create buttons
+        addToCartButton = new JButton("Add to Shopping Cart");
+        exitButton = new JButton("Exit");
 
+        // GridBagConstraints for layout
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -72,71 +86,54 @@ public class WestminsterShoppingCenter extends WestminsterShoppingManager {
 
         gbc.gridx = 0;
         gbc.gridy = 2;
-        panel5.add(shoppingCartButton, gbc);
+        panel5.add(addToCartButton, gbc);
 
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        panel5.add(exitButton, gbc);
+
+        // Add panels to main panel
         panel2.add(panel3);
         panel2.add(panel4);
         panel2.add(panel5);
 
-//        JTable table;
+        panel5.add(addToCartButton, gbc);
+        panel5.add(exitButton, gbc);
+        panel5.add(shoppingCartButton, gbc); // Add shopping cart button to the panel
+
+
+        // Create table and scroll pane
         table = createJTable(getProductDropdown(WestminsterShoppingManager.shoppingCart.getProductList(), selectedValue));
         JScrollPane scrollPane = new JScrollPane(table);
 
+        // Add components to panels
         panel1.add(panel2);
         panel1.add(scrollPane);
-//        System.out.println("just before actionlistner - "+dropdown.getSelectedItem());
+
+        // Add action listener for dropdown menu
         dropdown.addActionListener(e -> {
             selectedValue = (String) dropdown.getSelectedItem();
-            System.out.println("Selected item: " + selectedValue);
-
             panel1.removeAll();
-
-//            JTable table;
             table = createJTable(getProductDropdown(WestminsterShoppingManager.shoppingCart.getProductList(), selectedValue));
-//             scrollPane = new JScrollPane(table);
-
             panel1.add(table);
             panel1.add(scrollPane);
-
-
         });
 
-//        panel1.add(scrollPane);
-
+        // Add panels to main frame
         mainFrame.add(panel1);
 
-//        System.out.println("after actionlistner - "+dropdown.getSelectedItem());
+        // Add table selection listener
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
                     int selectedRow = table.getSelectedRow();
                     if (selectedRow != -1) {
-                        // Get the selected product from the row
-//                        Product selectedProduct = getProductFromSelectedRow(selectedRow, WestminsterShoppingManger.shoppingCart.getProductList());
                         Product selectedProduct = WestminsterShoppingManager.shoppingCart.getProductList().get(selectedRow);
 
-                        productIDLabel.setText("Product ID - "+ selectedProduct.getProductId());
-                        categoryLabel.setText("Category - "+ selectedProduct.getObjecttype());
-                        nameLabel.setText("Name - " + selectedProduct.getProductName());
-                        noItemsLabel.setText("Items available - "+selectedProduct.getNumberofItems());
+                        // Display product details in the labels
+                        // ...
 
-                        switch (selectedProduct.getObjecttype()){
-                            case "electronics":
-                                miscLabel1.setText("Brand - "+ selectedProduct.getBrand());
-                                displayPanel.add(miscLabel1);
-                                miscLabel2.setText("Warrenty Period - "+ selectedProduct.getWarrantyPeriod());
-                                displayPanel.add(miscLabel1);
-                                break;
-                            case "clothing":
-                                miscLabel1.setText("Size - "+ selectedProduct.getSize());
-                                displayPanel.add(miscLabel1);
-                                miscLabel1.setText("Color - " + selectedProduct.getColor());
-                                displayPanel.add(miscLabel2);
-                                break;
-
-                        }
-//                        displayPanel.setBackground(Color.green);
                         displayPanel.add(displayLabel1);
                         displayPanel.add(productIDLabel);
                         displayPanel.add(categoryLabel);
@@ -144,31 +141,49 @@ public class WestminsterShoppingCenter extends WestminsterShoppingManager {
                         displayPanel.add(miscLabel1);
                         displayPanel.add(miscLabel2);
                         displayPanel.add(noItemsLabel);
-
                     }
                 }
             }
         });
 
+        // Add action listener for "Add to Shopping Cart" button
+        addToCartButton.addActionListener(e -> {
+            // Add logic here to handle adding the selected product to the shopping cart
+            // For example, you can call a method like addToShoppingCart(selectedProduct)
+            // where selectedProduct is the product selected in the table
+        });
+        shoppingCartButton.addActionListener(e -> {
+            openShoppingCartFrame(); // Open the shopping cart JFrame when button is clicked
+        });
 
+        // Add action listener for "Exit" button
+        exitButton.addActionListener(e -> {
+            mainFrame.dispose(); // Close the GUI
+        });
+
+        // Add display panel to main frame
         mainFrame.add(displayPanel);
+        mainFrame.setVisible(true);
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Set frame visibility and default close operation
         mainFrame.setVisible(true);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    public static JTable createJTable(ArrayList<Product> productList){
-        String[] columnNames = {"Product ID" , "Name", "Category", "Price($)", "Info"};
-        DefaultTableModel model = new DefaultTableModel(columnNames,0);
+    // Method to create JTable
+    public static JTable createJTable(ArrayList<Product> productList) {
+        String[] columnNames = {"Product ID", "Name", "Category", "Price($)", "Info"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
         for (Product product : productList) {
-            switch (product.getObjecttype()){
-
+            switch (product.getObjecttype()) {
                 case "electronics":
-                    Object[] rowDataElectronic = {product.getProductId(), product.getProductName(),product.getObjecttype(), product.getPrice(), product.getBrand() + ", "+product.getWarrantyPeriod() +" months warrenty"};
+                    Object[] rowDataElectronic = {product.getProductId(), product.getProductName(), product.getObjecttype(), product.getPrice(), product.getBrand() + ", " + product.getWarrantyPeriod() + " months warranty"};
                     model.addRow(rowDataElectronic);
                     break;
                 case "clothing":
-                    Object[] rowDataClothing = {product.getProductId(), product.getProductName(),product.getObjecttype(), product.getPrice(), product.getSize()+ ", "+ product.getColor()};
+                    Object[] rowDataClothing = {product.getProductId(), product.getProductName(), product.getObjecttype(), product.getPrice(), product.getSize() + ", " + product.getColor()};
                     model.addRow(rowDataClothing);
                     break;
             }
@@ -176,30 +191,26 @@ public class WestminsterShoppingCenter extends WestminsterShoppingManager {
         JTable table = new JTable(model);
         table.setDefaultEditor(Object.class, null);
 
-        return  table;
+        return table;
     }
-//    private static Product getProductFromSelectedRow(int selectedRow, ArrayList<Product> productList) {
-//        // You need to map the row index to the actual index in your product list
-//        // Assuming the JTable and productList have the same order
-//        return productList.get(selectedRow);
-//    }
 
-    private static ArrayList<Product> getProductDropdown (ArrayList<Product> productList, String selectedType ) {
+    // Method to filter products based on category
+    private static ArrayList<Product> getProductDropdown(ArrayList<Product> productList, String selectedType) {
         ArrayList<Product> newproductList = new ArrayList<>();
-        switch (selectedType){
+        switch (selectedType) {
             case "All":
                 newproductList = productList;
                 break;
             case "Electronic":
-                for (Product product: productList) {
-                    if (product.getObjecttype().equals("electronics")){
+                for (Product product : productList) {
+                    if (product.getObjecttype().equals("electronics")) {
                         newproductList.add(product);
                     }
                 }
                 break;
             case "Clothing":
-                for (Product product: productList) {
-                    if (product.getObjecttype().equals("clothing")){
+                for (Product product : productList) {
+                    if (product.getObjecttype().equals("clothing")) {
                         newproductList.add(product);
                     }
                 }
@@ -208,6 +219,15 @@ public class WestminsterShoppingCenter extends WestminsterShoppingManager {
         System.out.println(selectedType);
         return newproductList;
     }
+
+    private static void openShoppingCartFrame() {
+        JFrame shoppingCartFrame = new JFrame("Shopping Cart");
+        shoppingCartFrame.setSize(600, 400);
+
+        // Add components and logic for the shopping cart frame as needed
+
+        shoppingCartFrame.setVisible(true);
+        shoppingCartFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }
+
 }
-
-
