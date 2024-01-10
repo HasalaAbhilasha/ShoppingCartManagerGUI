@@ -1,25 +1,17 @@
 public class User {
-    private String userName;
+    private String username;
     private String password;
 
-    public User(String userName, String password) {
-
-        this.userName =userName;
-        this.password =password;
-    }
-    public String getPassword() {
-        return password;
-    }
-
-    public String getUserName(){
-        return userName;
-    }
-
-    public void setPassword(String password) {
+    public User(String username, String password) {
+        this.username = username;
         this.password = password;
     }
 
-    public void setUserName(String userName){
-        this.userName= userName;
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }

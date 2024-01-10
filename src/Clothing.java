@@ -1,9 +1,11 @@
 public class Clothing extends Product {
+
     private String size;
     private String color;
 
-    public Clothing(String productId, String productName, int availableItems, double price,String productType, String size, String color) {
-        super(productId, productName, availableItems, price, productType);
+
+    public Clothing(String productId, String productName, int numberofItems, double price, String objecttype, String size, String color) {
+        super(productId, productName, numberofItems, price, objecttype);
         this.size = size;
         this.color = color;
     }
@@ -11,11 +13,15 @@ public class Clothing extends Product {
     public String getSize() {
         return size;
     }
+
     public String getColor() {
         return color;
     }
 
-    public void displayProducts() {
-        System.out.println(getProductId()+getProductName()+getNumberofavailableitems()+getPrice()+getSize()+getColor() + getProductType());
+
+
+    @Override
+    public String productDetails() {
+        return (getProductId()+"|"+getProductName()+"|"+getNumberofItems()+"|"+getPrice()+"|"+getSize()+"|"+getColor()+"|"+getObjecttype());
     }
 }
