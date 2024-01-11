@@ -9,7 +9,7 @@ public class ShoppingCart {
     }
 
     public  void addProduct(Product product) {
-       productList.add(product);
+        productList.add(product);
     }
 
     public ArrayList<Product> getProductList() {
