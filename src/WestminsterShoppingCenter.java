@@ -11,10 +11,7 @@ public class WestminsterShoppingCenter extends WestminsterShoppingManager {
     private static JTable table;
     private static String selectedValue;
     private static JButton addToCartButton;
-    private static JButton exitButton;
     private static JButton shoppingCartButton; // New button for shopping cart
-
-
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(WestminsterShoppingCenter::createAndShowGUI);
@@ -23,17 +20,15 @@ public class WestminsterShoppingCenter extends WestminsterShoppingManager {
     private static void createAndShowGUI() {
         // Create the main JFrame
         JFrame mainFrame = new JFrame("Westminster Shopping Center");
-        mainFrame.setSize(800, 900);
-        mainFrame.setLayout(new GridLayout(3, 1));
-        shoppingCartButton = new JButton("Shopping Cart"); // Initialize shopping cart button
-
+        mainFrame.setSize(800, 500);
 
         // Create panels
-        JPanel panel1 = new JPanel(new GridLayout(2, 1));
-        JPanel panel2 = new JPanel(new GridLayout(1, 3));
-        JPanel panel3 = new JPanel(new GridBagLayout());
-        JPanel panel4 = new JPanel(new GridBagLayout());
-        JPanel panel5 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JPanel panel1 = new JPanel(new BorderLayout());
+        JPanel panel2 = new JPanel(new GridLayout(1, 4));
+        JPanel panel3 = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel panel4 = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel panel5 = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel panel6 = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JPanel displayPanel = new JPanel();
         displayPanel.setLayout(new BoxLayout(displayPanel, BoxLayout.Y_AXIS));
 
@@ -70,57 +65,62 @@ public class WestminsterShoppingCenter extends WestminsterShoppingManager {
         // Initialize selected value
         selectedValue = (String) dropdown.getSelectedItem();
 
-        // Create buttons
-        addToCartButton = new JButton("Add to Shopping Cart");
-        exitButton = new JButton("Exit");
+        // Create buttons with smaller size
+        addToCartButton = new JButton("Add to Cart");
+        shoppingCartButton = new JButton("Shopping Cart");
 
-        // GridBagConstraints for layout
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        panel3.add(label1, gbc);
+        Dimension buttonSize = new Dimension(120, 30);
+        addToCartButton.setPreferredSize(buttonSize);
+        shoppingCartButton.setPreferredSize(buttonSize);
 
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        panel4.add(dropdown, gbc);
+        // Create a panel for the buttons
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.add(addToCartButton);
+        buttonPanel.add(shoppingCartButton);
 
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        panel5.add(addToCartButton, gbc);
-
-        gbc.gridx = 1;
-        gbc.gridy = 2;
-        panel5.add(exitButton, gbc);
-
-        // Add panels to main panel
-        panel2.add(panel3);
-        panel2.add(panel4);
-        panel2.add(panel5);
-
-        panel5.add(addToCartButton, gbc);
-        panel5.add(exitButton, gbc);
-        panel5.add(shoppingCartButton, gbc); // Add shopping cart button to the panel
-
+        // Add components to panels
+        panel3.add(label1);
+        panel4.add(dropdown);
+        panel5.add(addToCartButton);
+        panel6.add(shoppingCartButton);
 
         // Create table and scroll pane
         table = createJTable(getProductDropdown(WestminsterShoppingManager.shoppingCart.getProductList(), selectedValue));
         JScrollPane scrollPane = new JScrollPane(table);
 
         // Add components to panels
-        panel1.add(panel2);
-        panel1.add(scrollPane);
+        panel1.add(panel2, BorderLayout.PAGE_START);
+        panel1.add(scrollPane, BorderLayout.CENTER);
+        panel1.add(displayPanel, BorderLayout.PAGE_END);
 
         // Add action listener for dropdown menu
         dropdown.addActionListener(e -> {
             selectedValue = (String) dropdown.getSelectedItem();
-            panel1.removeAll();
-            table = createJTable(getProductDropdown(WestminsterShoppingManager.shoppingCart.getProductList(), selectedValue));
-            panel1.add(table);
-            panel1.add(scrollPane);
-        });
 
-        // Add panels to main frame
-        mainFrame.add(panel1);
+            // Clear the existing table and display panel
+            DefaultTableModel model = (DefaultTableModel) table.getModel();
+            model.setRowCount(0);
+            displayPanel.removeAll();
+
+            // Add the new filtered products to the table
+            ArrayList<Product> filteredProducts = getProductDropdown(WestminsterShoppingManager.shoppingCart.getProductList(), selectedValue);
+            for (Product product : filteredProducts) {
+                switch (product.getObjecttype()) {
+                    case "electronics":
+                        Object[] rowDataElectronic = {product.getProductId(), product.getProductName(), product.getObjecttype(), product.getPrice(), product.getBrand() + ", " + product.getWarrantyPeriod() + " months warranty"};
+                        model.addRow(rowDataElectronic);
+                        break;
+                    case "clothing":
+                        Object[] rowDataClothing = {product.getProductId(), product.getProductName(), product.getObjecttype(), product.getPrice(), product.getSize() + ", " + product.getColor()};
+                        model.addRow(rowDataClothing);
+                        break;
+                }
+            }
+
+            // Refresh the display panel
+            mainFrame.revalidate();
+            mainFrame.repaint();
+        });
 
         // Add table selection listener
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -132,39 +132,43 @@ public class WestminsterShoppingCenter extends WestminsterShoppingManager {
                         Product selectedProduct = WestminsterShoppingManager.shoppingCart.getProductList().get(selectedRow);
 
                         // Display product details in the labels
-                        // ...
+                        productIDLabel.setText("Product ID: " + selectedProduct.getProductId());
+                        categoryLabel.setText("Category: " + selectedProduct.getObjecttype());
+                        nameLabel.setText("Name: " + selectedProduct.getProductName());
 
+                        // Add labels to the display panel
                         displayPanel.add(displayLabel1);
                         displayPanel.add(productIDLabel);
                         displayPanel.add(categoryLabel);
                         displayPanel.add(nameLabel);
-                        displayPanel.add(miscLabel1);
-                        displayPanel.add(miscLabel2);
-                        displayPanel.add(noItemsLabel);
+
+                        // Refresh the display panel
+                        mainFrame.revalidate();
+                        mainFrame.repaint();
                     }
                 }
             }
         });
 
-        // Add action listener for "Add to Shopping Cart" button
+        // Add action listener for "Add to Cart" button
         addToCartButton.addActionListener(e -> {
-            // Add logic here to handle adding the selected product to the shopping cart
-            // For example, you can call a method like addToShoppingCart(selectedProduct)
+            // Add logic here to handle adding the selected product to the cart
+            // For example, you can call a method like addToCart(selectedProduct)
             // where selectedProduct is the product selected in the table
         });
+
+        // Add action listener for "Shopping Cart" button
         shoppingCartButton.addActionListener(e -> {
             openShoppingCartFrame(); // Open the shopping cart JFrame when button is clicked
         });
 
-        // Add action listener for "Exit" button
-        exitButton.addActionListener(e -> {
-            mainFrame.dispose(); // Close the GUI
-        });
+        // Add panels to the main frame
+        panel2.add(panel3);
+        panel2.add(panel4);
+        panel2.add(panel5);
+        panel2.add(panel6);
 
-        // Add display panel to main frame
-        mainFrame.add(displayPanel);
-        mainFrame.setVisible(true);
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.add(panel1, BorderLayout.CENTER);
 
         // Set frame visibility and default close operation
         mainFrame.setVisible(true);
@@ -173,7 +177,7 @@ public class WestminsterShoppingCenter extends WestminsterShoppingManager {
 
     // Method to create JTable
     public static JTable createJTable(ArrayList<Product> productList) {
-        String[] columnNames = {"Product ID", "Name", "Category", "Price($)", "Info"};
+        String[] columnNames = {"Product ID", "Name", "Category", "Price($)","Quantity", "Info"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
         for (Product product : productList) {
@@ -229,5 +233,4 @@ public class WestminsterShoppingCenter extends WestminsterShoppingManager {
         shoppingCartFrame.setVisible(true);
         shoppingCartFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
-
 }

@@ -43,7 +43,6 @@ public class WestminsterShoppingManager implements ShoppingManager {
                     westminsterShoppingManager.saveToFile();
                     break;
                 case 5:
-                    WestminsterShoppingCenter.main(null);
                     WestminsterShoppingCenter.main(args);
                     break;
                 default:
@@ -60,15 +59,15 @@ public class WestminsterShoppingManager implements ShoppingManager {
             double price;
 
             while (true) {
-                System.out.println("Choose the product type");
-                System.out.println("1 for Electronics");
-                System.out.println("2 for Clothing");
+                System.out.println("### Choose the product type ###");
+                System.out.println("1 for Electronics: ");
+                System.out.println("2 for Clothing: ");
 
                 productType = returnInt();
                 if (productType == 1 || productType == 2) {
                     break;
                 } else {
-                    System.out.print("Enter a valid option: ");
+                    System.out.println("Enter a valid option: ");
                     input.nextLine();
                 }
             }
