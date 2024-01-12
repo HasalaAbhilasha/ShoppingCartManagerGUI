@@ -6,10 +6,14 @@ import java.util.Scanner;
 
 public class WestminsterShoppingManager implements ShoppingManager {
     // Scanner for user input
-    public static Scanner input = new Scanner(System.in);
+    private static Scanner input = new Scanner(System.in);
 
     // Shopping cart instance
-    public static ShoppingCart shoppingCart = new ShoppingCart();
+    static ShoppingCart shoppingCart = new ShoppingCart();
+
+    // Default manager password
+    private static final String DEFAULT_MANAGER_PASSWORD = "1234";
+    private String[] args;
 
     // Main method to interact with the user
     public static void main(String[] args) {
@@ -19,11 +23,8 @@ public class WestminsterShoppingManager implements ShoppingManager {
         int num;
         while (true) {
             System.out.println("Enter your choice: ");
-            System.out.println("1. Add a new product");
-            System.out.println("2. Delete a product");
-            System.out.println("3. Print the list of products");
-            System.out.println("4. Save to file");
-            System.out.println("5. Open GUI");
+            System.out.println("1. User");
+            System.out.println("2. Manager");
             System.out.println("0. Exit");
 
             num = returnInt();
@@ -31,16 +32,47 @@ public class WestminsterShoppingManager implements ShoppingManager {
                 case 0:
                     return;
                 case 1:
-                    westminsterShoppingManager.addProduct();
+                    WestminsterShoppingCenter.main(args);
                     break;
                 case 2:
-                    westminsterShoppingManager.deleteProduct();
+                    if (westminsterShoppingManager.managerLogin()) {
+                        westminsterShoppingManager.manager();
+                    } else {
+                        System.out.println("Invalid manager password. Try again.");
+                    }
+                    break;
+                default:
+                    System.out.println("Enter a valid option");
+            }
+        }
+    }
+
+    // Method to perform manager operations
+    public void manager() {
+        while (true) {
+            System.out.println("Enter your choice: ");
+            System.out.println("1. Add a new product");
+            System.out.println("2. Delete a product");
+            System.out.println("3. Print the list of products");
+            System.out.println("4. Save to file");
+            System.out.println("5. Open GUI");
+            System.out.println("0. Exit");
+
+            int num = returnInt();
+            switch (num) {
+                case 0:
+                    return;
+                case 1:
+                    addProduct();
+                    break;
+                case 2:
+                    deleteProduct();
                     break;
                 case 3:
-                    westminsterShoppingManager.displayProducts();
+                    displayProducts();
                     break;
                 case 4:
-                    westminsterShoppingManager.saveToFile();
+                    saveToFile();
                     break;
                 case 5:
                     WestminsterShoppingCenter.main(args);
@@ -49,6 +81,17 @@ public class WestminsterShoppingManager implements ShoppingManager {
                     System.out.println("Enter a valid option");
             }
         }
+    }
+
+    // ... (rest of your code)
+
+    // Method to check manager login
+    private boolean managerLogin() {
+        System.out.println("Enter manager password (default is \"1234\"): ");
+        String enteredPassword = input.next();
+
+        // Check if the entered password matches the default manager password
+        return enteredPassword.equals(DEFAULT_MANAGER_PASSWORD);
     }
 
     // Method to add a new product to the shopping cart

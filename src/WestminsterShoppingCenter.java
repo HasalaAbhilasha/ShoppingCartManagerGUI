@@ -5,6 +5,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class WestminsterShoppingCenter extends WestminsterShoppingManager {
 
