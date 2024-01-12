@@ -245,16 +245,37 @@ public class WestminsterShoppingCenter extends WestminsterShoppingManager {
         // Create a label to display the total price
         JLabel totalLabel = new JLabel("Total Price: $" + shoppingCart.getTotalPrice());
 
+        // Create a button to remove selected products
+        JButton removeButton = new JButton("Remove from Cart"); // Updated button text
+        removeButton.addActionListener(e -> {
+            int selectedRow = cartTable.getSelectedRow();
+            if (selectedRow != -1) {
+                // Remove the selected product from the shopping cart
+                shoppingCart.getSelectedItems().remove(selectedRow);
+
+                // Update the table and total price
+                ((DefaultTableModel) cartTable.getModel()).removeRow(selectedRow);
+                totalLabel.setText("Total Price: $" + shoppingCart.getTotalPrice());
+            }
+        });
+
         // Create a panel to hold the components
         JPanel cartPanel = new JPanel(new BorderLayout());
         cartPanel.add(cartScrollPane, BorderLayout.CENTER);
         cartPanel.add(totalLabel, BorderLayout.SOUTH);
 
-        // Add the cart panel to the shopping cart frame
-        shoppingCartFrame.add(cartPanel);
+        // Create a panel for the button
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.add(removeButton);
+
+        // Add the cart panel and button panel to the shopping cart frame
+        shoppingCartFrame.add(cartPanel, BorderLayout.CENTER);
+        shoppingCartFrame.add(buttonPanel, BorderLayout.NORTH);
 
         shoppingCartFrame.setVisible(true);
         shoppingCartFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
+
+
 
 }

@@ -11,6 +11,9 @@ public class ShoppingCart {
     public void addToCart(Product product) {
         selectedItems.add(product);
     }
+    public void removeFromCart(Product product) {
+        selectedItems.remove(product);
+    }
     public ArrayList<Product> getSelectedItems() {
         return selectedItems;
     }
