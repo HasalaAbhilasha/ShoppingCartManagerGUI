@@ -1,57 +1,52 @@
-public abstract class Product implements Comparable<Product>{
-    private String objecttype;
-    private String ProductId;
-    private String ProductName;
-    private int numberofItems;
+public abstract class Product implements Comparable<Product> {
+
+    private String productId;
+    private String productName;
+    private int numberofavailableitems;
     private double price;
+    private String productType;
 
-    public Product(String productId, String productName, int numberofItems, double price, String objecttype) {
-        this.ProductId = productId;
-        this.ProductName = productName;
-        this.numberofItems = numberofItems;
-        this.price = price;
-        this.objecttype =objecttype;
+    public Product(String productId,String productName,int numberofavailableitems,double price, String productType){
+        this.productId =productId;
+        this.productName =productName;
+        this.numberofavailableitems =numberofavailableitems;
+        this.price =price;
+        this.productType = productType;
     }
 
-    public String getProductId() {
-        return ProductId;
-    }
-
-    public String getProductName() {
-        return ProductName;
-    }
-
-    public int getNumberofItems() {
-        return numberofItems;
-    }
-
-    public double getPrice() {
+    public double getPrice(){
         return price;
     }
 
-    public String getObjecttype() {
-        return objecttype;
+    public String getProductId() {
+        return productId;
     }
 
-    abstract String productDetails();
-
-    public String getBrand(){
-        return getBrand();
-    }
-    public int getWarrantyPeriod(){
-        return getWarrantyPeriod();
-    }
-    public String getSize(){
-        return getSize();
+    public int getNumberofavailableitems() {
+        return numberofavailableitems;
     }
 
-    public String getColor(){
-        return getColor();
+    public String getProductName() {
+        return productName;
     }
 
-    public int compareTo(Product product){
-        return ProductId.compareTo(product.ProductId);
+    public String getProductType() {
+        return productType;
     }
 
+    public String getBrand() {return getBrand();}
+    public int getWarrantyPeriod() { return getWarrantyPeriod();}
+
+    public String getSize() { return getSize();}
+
+    public String getColor() {return getColor();}
+
+
+    abstract String displayProduct();
+
+    public int compareTo(Product product) {
+        return productId.compareTo(product.productId);
+
+    }
 
 }

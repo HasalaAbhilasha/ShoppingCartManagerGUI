@@ -1,11 +1,9 @@
 public class Clothing extends Product {
-
     private String size;
     private String color;
 
-
-    public Clothing(String productId, String productName, int numberofItems, double price, String objecttype, String size, String color) {
-        super(productId, productName, numberofItems, price, objecttype);
+    public Clothing(String productId, String productName, int availableItems, double price,String productType, String size, String color) {
+        super(productId, productName, availableItems, price, productType);
         this.size = size;
         this.color = color;
     }
@@ -18,10 +16,7 @@ public class Clothing extends Product {
         return color;
     }
 
-
-
-    @Override
-    public String productDetails() {
-        return (getProductId()+"|"+getProductName()+"|"+getNumberofItems()+"|"+getPrice()+"|"+getSize()+"|"+getColor()+"|"+getObjecttype());
+    public String displayProduct(){
+        return (getProductId()+"|"+getProductName()+"|"+getNumberofavailableitems()+"|"+getPrice()+"|"+getSize()+"|"+getColor()+"|"+getProductType());
     }
 }

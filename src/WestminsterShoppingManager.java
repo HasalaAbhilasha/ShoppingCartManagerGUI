@@ -4,62 +4,25 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class WestminsterShoppingManager implements ShoppingManager {
-    // Scanner for user input
-    private static Scanner input = new Scanner(System.in);
+public class WestminsterShoppingManager {
 
-    // Shopping cart instance
-    static ShoppingCart shoppingCart = new ShoppingCart();
+    public static ShoppingCart productList =new ShoppingCart();
 
-    // Default manager password
-    private static final String DEFAULT_MANAGER_PASSWORD = "1234";
-    private String[] args;
+    private static Scanner input =new Scanner(System.in);
 
-    // Main method to interact with the user
     public static void main(String[] args) {
-        WestminsterShoppingManager westminsterShoppingManager = new WestminsterShoppingManager();
-        westminsterShoppingManager.loadFromFile();
 
-        int num;
-        while (true) {
-            System.out.println("Enter your choice: ");
-            System.out.println("1. User");
-            System.out.println("2. Manager");
-            System.out.println("0. Exit");
+        loadFromFile();
+        while(true){
+            System.out.println("1.Add Product");
+            System.out.println("2.remove Product");
+            System.out.println("3.display all Products");
+            System.out.println("4.save");
+            System.out.println("0.exit");
 
-            num = returnInt();
-            switch (num) {
-                case 0:
-                    return;
-                case 1:
-                    WestminsterShoppingCenter.main(args);
-                    break;
-                case 2:
-                    if (westminsterShoppingManager.managerLogin()) {
-                        westminsterShoppingManager.manager();
-                    } else {
-                        System.out.println("Invalid manager password. Try again.");
-                    }
-                    break;
-                default:
-                    System.out.println("Enter a valid option");
-            }
-        }
-    }
 
-    // Method to perform manager operations
-    public void manager() {
-        while (true) {
-            System.out.println("Enter your choice: ");
-            System.out.println("1. Add a new product");
-            System.out.println("2. Delete a product");
-            System.out.println("3. Print the list of products");
-            System.out.println("4. Save to file");
-            System.out.println("5. Open GUI");
-            System.out.println("0. Exit");
-
-            int num = returnInt();
-            switch (num) {
+            int number =input.nextInt();
+            switch (number){
                 case 0:
                     return;
                 case 1:
@@ -69,215 +32,149 @@ public class WestminsterShoppingManager implements ShoppingManager {
                     deleteProduct();
                     break;
                 case 3:
-                    displayProducts();
+                    displayProduct();
                     break;
                 case 4:
-                    saveToFile();
+                    savefile();
                     break;
                 case 5:
-                    WestminsterShoppingCenter.main(args);
+                    new WestminsterFrame();
                     break;
                 default:
-                    System.out.println("Enter a valid option");
+                    System.out.println("wrong input");
+            }
+        }
+
+    }
+
+    private static void addProduct() {
+
+        System.out.println("Enter the productID");
+        String ProductId =input.next();
+        System.out.println("Enter the product Name");
+        String ProductName =input.next();
+        System.out.println("Enter the NoofItems");
+        int Numberofavailableitems=input.nextInt();
+        System.out.println("Enter the Price");
+        double price = input.nextDouble();
+
+        System.out.println("Enter the products want");
+        System.out.println("1.Clothing");
+        System.out.println("2.Electronics");
+        int number =input.nextInt();
+        if (number==1){
+            System.out.println("Enter the size");
+            String size =input.next();
+            System.out.println("Enter the color");
+            String color =input.next();
+
+            Clothing clothing =new Clothing(ProductId,ProductName,Numberofavailableitems,price,"clothing",size,color);
+            productList.addProduct(clothing);
+        } else if (number==2){
+            System.out.println("Enter the brand");
+            String brand =input.next();
+            System.out.println("Enter the warrentyPeriod");
+            int warrentyperiod =input.nextInt();
+
+            Electronics electronics =new Electronics(ProductId,ProductName,Numberofavailableitems,price,"electronic",brand,warrentyperiod);
+            productList.addProduct(electronics);
+        }else {
+            System.out.println("Invalid product type");
+        }
+    }
+
+
+    private static void displayProduct() {
+        if(productList.getProductList().isEmpty()){
+            System.out.println("Product cart is Empty!");
+        }else {
+            for (int i = 0; i < productList.getProductList().size(); i++) {
+                System.out.println(productList.getProductList().get(i).displayProduct());
             }
         }
     }
 
-    // ... (rest of your code)
+    private static void deleteProduct() {
+        displayProduct();
 
-    // Method to check manager login
-    private boolean managerLogin() {
-        System.out.println("Enter manager password (default is \"1234\"): ");
-        String enteredPassword = input.next();
+        System.out.println("Enter product ID");
+        String productToDlt = input.next();
 
-        // Check if the entered password matches the default manager password
-        return enteredPassword.equals(DEFAULT_MANAGER_PASSWORD);
-    }
+        System.out.println("Enter the products want");
+        System.out.println("1.Clothing");
+        System.out.println("2.Electronics");
+        int number =input.nextInt();
 
-    // Method to add a new product to the shopping cart
-    public void addProduct() {
-        if (shoppingCart.getProductList().size() <= 50) {
-            int productType;
-            int productItems;
-            double price;
+        boolean itemDeleted = false;
 
-            while (true) {
-                System.out.println("### Choose the product type ###");
-                System.out.println("1 for Electronics: ");
-                System.out.println("2 for Clothing: ");
-
-                productType = returnInt();
-                if (productType == 1 || productType == 2) {
-                    break;
-                } else {
-                    System.out.println("Enter a valid option: ");
-                    input.nextLine();
+        switch (number) {
+            case 1:
+                for (int i = 0; i < productList.getProductList().size(); i++) {
+                    if (productList.getProductList().get(i).getProductType().equals("clothing") && productList.getProductList().get(i).getProductId().equals(productToDlt)){
+                        System.out.println(productList.getProductList().get(i).displayProduct());
+                        productList.removeProduct(productList.getProductList().get(i));
+                        itemDeleted = true;
+                    }
                 }
-            }
-
-            System.out.print("Product ID: ");
-            String productId = input.next();
-            System.out.print("Product Name: ");
-            String productName = input.next();
-            System.out.print("No. of items: ");
-            productItems = returnInt();
-            System.out.print("Price: ");
-            price = returnDouble();
-
-            switch (productType) {
-                case 1:
-                    System.out.print("Enter the brand: ");
-                    String brand = input.next();
-                    System.out.print("Enter the warranty period in months: ");
-                    int warrantyPeriod = returnInt();
-                    Electronics electronics = new Electronics(productId, productName, productItems, price, "electronics", brand, warrantyPeriod);
-                    shoppingCart.addProduct(electronics);
-                    break;
-                case 2:
-                    System.out.println("Enter the Size");
-                    String size = input.next();
-                    System.out.println("Enter the color");
-                    String color = input.next();
-                    Clothing clothing = new Clothing(productId, productName, productItems, price, "clothing", size, color);
-                    shoppingCart.addProduct(clothing);
-                    break;
-                default:
-                    System.out.println("Product not found!");
-                    break;
-            }
-        } else {
-            System.out.println("You have reached the limit of 50 products!");
-        }
-    }
-
-    // Method to delete a product from the shopping cart
-    public void deleteProduct() {
-        displayProducts();
-
-        while (true) {
-            System.out.println("Choose the product type");
-            System.out.println("1 for Electronics");
-            System.out.println("2 for Clothing :");
-
-            int productType = returnInt();
-
-            System.out.println("Enter product ID");
-            String productId = input.next();
-
-            boolean deleted = false;
-
-            switch (productType) {
-                case 1:
-                    for (int i = 0; i < shoppingCart.getProductList().size(); i++) {
-                        if (productId.equals(shoppingCart.getProductList().get(i).getProductId()) && "electronics".equals(shoppingCart.getProductList().get(i).getObjecttype())) {
-                            shoppingCart.getProductList().get(i).productDetails();
-                            shoppingCart.deleteProduct(shoppingCart.getProductList().get(i));
-                            deleted = true;
-                        }
-                    }
-                    break;
-                case 2:
-                    for (int i = 0; i < shoppingCart.getProductList().size(); i++) {
-                        if (productId.equals(shoppingCart.getProductList().get(i).getProductId()) && "clothing".equals(shoppingCart.getProductList().get(i).getObjecttype())) {
-                            shoppingCart.getProductList().get(i).productDetails();
-                            shoppingCart.deleteProduct(shoppingCart.getProductList().get(i));
-                            deleted = true;
-                        }
-                    }
-                    break;
-                default:
-                    System.out.println("Invalid product type!");
-            }
-
-            if (deleted) {
-                System.out.println("Product deleted successfully.");
-                System.out.println("Products remaining in the Cart: " + shoppingCart.getProductList().size());
                 break;
-            } else {
-                System.out.println("Product not found.");
-            }
+            case 2:
+                for (int i = 0; i < productList.getProductList().size(); i++) {
+                    if (productList.getProductList().get(i).getProductType().equals("electronic") && productList.getProductList().get(i).getProductId().equals(productToDlt)){
+                        System.out.println(productList.getProductList().get(i).displayProduct());
+                        productList.removeProduct(productList.getProductList().get(i));
+                        itemDeleted = true;
+                    }
+                }
+                break;
+            default:
+                System.out.println("Invalid product Type");
+        }
+        if(itemDeleted){
+            System.out.println("Product Deleted Successfully!");
+            System.out.println("Items remaining in the Cart"+ productList.getProductList().size());
+        }else {
+            System.out.println("Product Not Found!");
         }
     }
 
-    // Method to display products in the shopping cart
-    public void displayProducts() {
-        if (shoppingCart.getProductList().isEmpty()) {
-            System.out.println("No products in the Cart.");
-        } else {
-            for (int i = 0; i < shoppingCart.getProductList().size(); i++) {
-                System.out.println(shoppingCart.getProductList().get(i).productDetails());
+    private static void savefile() {
+        try{
+            FileWriter productFile = new FileWriter("SavedProducts.txt");
+            for (int i = 0; i < productList.getProductList().size(); i++) {
+                productFile.write(productList.getProductList().get(i).displayProduct()+"\n");
             }
+            productFile.close();
+            System.out.println("Products saved successfully in SavedProducts.txt");
+        } catch(IOException e){
+            System.out.println("An error occured!");
         }
     }
 
-    // Method to save products to a file
-    public void saveToFile() {
+    public static void loadFromFile() {
         try {
-            FileWriter myWriter = new FileWriter("savedProducts.txt");
-            for (int i = 0; i < shoppingCart.getProductList().size(); i++) {
-                myWriter.write(shoppingCart.getProductList().get(i).productDetails() + "\n");
-            }
-            myWriter.close();
-            System.out.println("Successfully wrote to the file.");
-        } catch (IOException e) {
-            System.out.println("No saved products found.");
-        }
-    }
-
-    // Method to load products from a file
-    public void loadFromFile() {
-        try {
-            File savedProducts = new File("savedProducts.txt");
-            Scanner fileReader = new Scanner(savedProducts);
+            File savedFile = new File("SavedProducts.txt");
+            Scanner fileReader = new Scanner(savedFile);
             while (fileReader.hasNextLine()) {
                 String dataLine = fileReader.nextLine();
-                String[] data = dataLine.split("\\|");
+                String[] dataArray = dataLine.split("\\|");
 
-                if (data.length == 7) {
-                    if (data[6].equals("electronics")) {
-                        Electronics electronics = new Electronics(data[0], data[1], Integer.parseInt(data[2]), Double.parseDouble(data[3]), data[6], data[4], Integer.parseInt(data[5]));
-                        shoppingCart.addProduct(electronics);
-                    } else if (data[6].equals("clothing")) {
-                        Clothing clothing = new Clothing(data[0], data[1], Integer.parseInt(data[2]), Double.parseDouble(data[3]), data[6], data[4], data[5]);
-                        shoppingCart.addProduct(clothing);
+                if(dataArray.length == 7){
+                    if (dataArray[6].equals("clothing")) {
+                        Clothing clothing = new Clothing(dataArray[0], dataArray[1], Integer.parseInt(dataArray[2]),Double.parseDouble(dataArray[3]) , "clothing", dataArray[4], dataArray[5]);
+                        productList.addProduct(clothing);
+                    } else if (dataArray[6].equals("electronic")) {
+                        Electronics electronics =new Electronics(dataArray[0],dataArray[1], Integer.parseInt(dataArray[2]),Double.parseDouble(dataArray[3]) , "electronic", dataArray[4], Integer.parseInt(dataArray[5]));
+                        productList.addProduct(electronics);
                     }
-                } else {
-                    System.out.println("Invalid data format in the file.");
+                }else{
+                    System.out.println("Invalid file format!");
                 }
             }
+            System.out.println("Loaded saved products from file!");
             fileReader.close();
         } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
+            System.out.println("No previously saved products found!");
         }
-    }
-
-    // Utility method to get an integer from user input
-    private static int returnInt() {
-        int value;
-        while (true) {
-            try {
-                value = input.nextInt();
-                break;
-            } catch (Exception e) {
-                System.out.print("Enter a valid value: ");
-                input.nextLine();
-            }
-        }
-        return value;
-    }
-
-    // Utility method to get a double from user input
-    private static double returnDouble() {
-        double value;
-        while (true) {
-            try {
-                value = input.nextDouble();
-                break;
-            } catch (Exception e) {
-                System.out.print("Enter a valid price: ");
-                input.nextLine();
-            }
-        }
-        return value;
     }
 }
+
