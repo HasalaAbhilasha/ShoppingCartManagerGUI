@@ -13,6 +13,9 @@ public class WestminsterShoppingCenter extends WestminsterShoppingManager {
     private static JButton addToCartButton;
     private static JButton shoppingCartButton; // New button for shopping cart
 
+    private static ShoppingCart shoppingCart = new ShoppingCart(); // Assume ShoppingCart class is available
+
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(WestminsterShoppingCenter::createAndShowGUI);
     }
@@ -152,14 +155,21 @@ public class WestminsterShoppingCenter extends WestminsterShoppingManager {
 
         // Add action listener for "Add to Cart" button
         addToCartButton.addActionListener(e -> {
-            // Add logic here to handle adding the selected product to the cart
-            // For example, you can call a method like addToCart(selectedProduct)
-            // where selectedProduct is the product selected in the table
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow != -1) {
+                Product selectedProduct = WestminsterShoppingManager.shoppingCart.getProductList().get(selectedRow);
+
+                // Add the selected product to the shopping cart
+                shoppingCart.addToCart(selectedProduct);
+
+                // Optional: Provide user feedback
+                JOptionPane.showMessageDialog(mainFrame, "Item added to the shopping cart.");
+            }
         });
 
         // Add action listener for "Shopping Cart" button
         shoppingCartButton.addActionListener(e -> {
-            openShoppingCartFrame(); // Open the shopping cart JFrame when button is clicked
+            openShoppingCartFrame(); // Open the shopping cart JFrame when the button is clicked
         });
 
         // Add panels to the main frame
@@ -228,9 +238,23 @@ public class WestminsterShoppingCenter extends WestminsterShoppingManager {
         JFrame shoppingCartFrame = new JFrame("Shopping Cart");
         shoppingCartFrame.setSize(600, 400);
 
-        // Add components and logic for the shopping cart frame as needed
+        // Create a table to display the selected items in the shopping cart
+        JTable cartTable = createJTable(shoppingCart.getSelectedItems());
+        JScrollPane cartScrollPane = new JScrollPane(cartTable);
+
+        // Create a label to display the total price
+        JLabel totalLabel = new JLabel("Total Price: $" + shoppingCart.getTotalPrice());
+
+        // Create a panel to hold the components
+        JPanel cartPanel = new JPanel(new BorderLayout());
+        cartPanel.add(cartScrollPane, BorderLayout.CENTER);
+        cartPanel.add(totalLabel, BorderLayout.SOUTH);
+
+        // Add the cart panel to the shopping cart frame
+        shoppingCartFrame.add(cartPanel);
 
         shoppingCartFrame.setVisible(true);
         shoppingCartFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
+
 }
