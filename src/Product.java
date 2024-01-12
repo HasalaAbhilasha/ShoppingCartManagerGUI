@@ -1,52 +1,60 @@
-public abstract class Product implements Comparable<Product>{
-    private String ProductId;
-    private String ProductName;
-    private int Numberofavailableitems;
-    private double Price;
-    private String productType;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.List;
 
-    public Product(String productId,String productName,int numberofavailableitems,double price, String productType){
-        this.ProductId = productId;
-        this.ProductName = productName;
-        this.Numberofavailableitems = numberofavailableitems;
-        this.Price = price;
-        this.productType = productType;
-    }
-    public double getPrice(){
-        return Price;
-    }
-    public String getProductId(){
-        return ProductId;
-    }
-    public String getProductType(){
-        return productType;
-    }
-    public String getProductName(){
-        return ProductName;
-    }
-    public int getNumberofavailableitems(){
-        return Numberofavailableitems;
+public class Product implements Serializable {
+    private String productId;
+    private String name;
+    private int availableItems;
+    private double price;
+    private LocalDate dateAdded;
+    private String category;
+    private List<Product> products;
+    private double totalCost;
+    private LocalDate purchaseDate;
+
+    // Constructor for creating a Purchase instance
+    public Product(List<Product> products, double totalCost, LocalDate purchaseDate) {
+        this.products = products;
+        this.totalCost = totalCost;
+        this.purchaseDate = purchaseDate;
     }
 
-    public String getBrand(){
-        return getBrand();
-    }
-    public int getWarrantyPeriod(){
-        return getWarrantyPeriod();
-    }
-    public String getSize(){
-        return getSize();
-    }
-    public String getColour(){
-        return getColour();
-    }
-    abstract String displayProducts();
-
-    public int compareTo(Product product){
-        return ProductId.compareTo(product.ProductId);
+    public Product(String productId, String name, int availableItems, double price, String category) {
+        this.productId = productId;
+        this.name = name;
+        this.availableItems = availableItems;
+        this.price = price;
+        this.dateAdded = LocalDate.now();
+        this.category = category;
     }
 
-    public void setNoOfItems(int quantity) {
-        this.Numberofavailableitems = quantity;
+    // Getters and setters
+
+    public String getProductId() { return productId; }
+    public String getName() { return name; }
+    public int getAvailableItems() { return availableItems; }
+    public double getPrice() { return price; }
+    public LocalDate getDateAdded() { return dateAdded; }
+    public String getCategory() { return category; }
+
+    // Method to set available items (if needed)
+    public void setAvailableItems(int availableItems) {
+        this.availableItems = availableItems;
+    }
+
+    // Method to set price (if needed)
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "Product ID: " + productId + "\n" +
+                "Name: " + name + "\n" +
+                "Category: " + category + "\n" +
+                "Available Items: " + availableItems + "\n" +
+                "Price: " + price + "\n" +
+                "Date Added: " + dateAdded + "\n";
     }
 }

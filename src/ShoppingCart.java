@@ -1,52 +1,119 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
 import java.util.ArrayList;
-import java.util.Collections;
-
+import javax.swing.JOptionPane;
 public class ShoppingCart {
-    private ArrayList<Product> productList;
+    private Map<Product, Integer> productQuantities;
+    private boolean isFirstPurchase;
+    private double categoryDiscount = 0.0;
+    private double firstPurchaseDiscount = 0.0;
+    private double subtotal = 0.0;
 
-//    public double totalCost;
-    public double firstDisVal;
-    public double threeItemDisVal;
-    public ShoppingCart(){
-        this.productList = new ArrayList<>();
+    public ShoppingCart() {
+        this.productQuantities = new HashMap<>();
+        this.isFirstPurchase = false; // Default value, change if necessary
     }
 
-    public void addProduct(Product product){
-        productList.add(product);
+    public List<Product> getProducts() {
+        return new ArrayList<>(productQuantities.keySet());
     }
-    public void removeProduct(Product product){
-        productList.remove(product);
+
+    public void addProduct(Product product) {
+        productQuantities.merge(product, 1, Integer::sum);
     }
-    public double totalCost(){
-        double totalCost = 0;
-        for (int i = 0; i < productList.size(); i++) {
-            System.out.println("Number of items - "+productList.get(i).getNumberofavailableitems());
-            totalCost = totalCost + productList.get(i).getPrice()*productList.get(i).getNumberofavailableitems();
+
+
+    public double calculateSubtotal() {
+        subtotal = productQuantities.entrySet().stream()
+                .mapToDouble(entry -> entry.getKey().getPrice() * entry.getValue())
+                .sum();
+        return subtotal;
+    }
+
+    public void clearCart() {
+        productQuantities.clear();
+        categoryDiscount = 0.0;
+        firstPurchaseDiscount = 0.0;
+        subtotal = 0.0;
+    }
+    // Method to validate quantities in the cart
+    public boolean validateCartQuantities() {
+        for (Map.Entry<Product, Integer> entry : productQuantities.entrySet()) {
+            Product product = entry.getKey();
+            int quantityInCart = entry.getValue();
+            int availableQuantity = product.getAvailableItems();
+
+            if (quantityInCart > availableQuantity) {
+                System.out.println("Validation failed for " + product.getName());
+                return false; // Quantity in cart exceeds available stock
+            }
         }
-        return totalCost;
+        System.out.println("All items in cart are valid.");
+        return true; // All quantities are valid
     }
-    public double firstDiscount(Boolean newAccount){
-        if (newAccount){
-            firstDisVal = totalCost() * 0.1;
+
+
+    public double calculateFinalTotal(User currentUser) {
+        subtotal = calculateSubtotal();
+        double total = subtotal;
+
+        // Calculate category discount
+        if (meetsCategoryDiscountCondition()) {
+            categoryDiscount = subtotal * 0.2; // 20% category discount
+            total -= categoryDiscount;
+        } else {
+            categoryDiscount = 0.0;
         }
-        System.out.println("firstDisVal - "+ firstDisVal);
-        return firstDisVal;
+
+        // Calculate first purchase discount
+        if (currentUser != null && !currentUser.hasPurchasedBefore()) {
+            firstPurchaseDiscount = subtotal * 0.1; // 10% first purchase discount
+            total -= firstPurchaseDiscount;
+        } else {
+            firstPurchaseDiscount = 0.0;
+        }
+
+        return total;
     }
 
-    public double threeItemsDiscount(){
-         threeItemDisVal = totalCost()*0.2;
-        System.out.println("threeItemDisVal - " + threeItemDisVal);
-        return threeItemDisVal;
+    public int getProductQuantity(Product product) {
+        return productQuantities.getOrDefault(product, 0);
     }
 
-    public double finalTotalValue(){
-        double finalTotalValue = totalCost() - firstDisVal - threeItemDisVal;
-        System.out.println("finalTotalValue - "+ finalTotalValue);
-        System.out.println("totalCost - " + totalCost());
-        return finalTotalValue;
+    public void updateProductQuantity(Product product, int quantity) {
+        if (quantity > 0) {
+            // Check if the requested quantity exceeds available stock
+            int availableQuantity = product.getAvailableItems();
+            if (quantity > availableQuantity) {
+                // Display GUI message
+                JOptionPane.showMessageDialog(null,
+                        "Requested quantity exceeds available stock.",
+                        "Quantity Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
+                productQuantities.put(product, quantity);
+            }
+        } else {
+            productQuantities.remove(product);
+        }
     }
-    public ArrayList<Product> getProductList(){
-        Collections.sort(productList);
-        return productList;
+
+    private boolean meetsCategoryDiscountCondition() {
+        Map<String, Integer> categoryCounts = new HashMap<>();
+        for (Product product : productQuantities.keySet()) {
+            String category = product.getCategory();
+            categoryCounts.merge(category, productQuantities.get(product), Integer::sum);
+        }
+        return categoryCounts.values().stream().anyMatch(count -> count >= 3);
     }
+
+    public double getCategoryDiscount() {
+        return categoryDiscount;
+    }
+
+    public double getFirstPurchaseDiscount() {
+        return firstPurchaseDiscount;
+    }
+
 }
