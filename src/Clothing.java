@@ -1,22 +1,22 @@
 public class Clothing extends Product {
     private String size;
-    private String color;
+    private String colour;
 
-    public Clothing(String productId, String productName, int availableItems, double price,String productType, String size, String color) {
-        super(productId, productName, availableItems, price, productType);
+    public Clothing(String productId, String productName, int numberofavailableitems, double price, String productType, String size, String colour) {
+        super(productId, productName, numberofavailableitems, price,productType);
+        this.colour = colour;
         this.size = size;
-        this.color = color;
     }
 
     public String getSize() {
         return size;
     }
 
-    public String getColor() {
-        return color;
+    public String getColour() {
+        return colour;
     }
 
-    public String displayProduct(){
-        return (getProductId()+"|"+getProductName()+"|"+getNumberofavailableitems()+"|"+getPrice()+"|"+getSize()+"|"+getColor()+"|"+getProductType());
+    public String displayProducts() {
+        return (getProductId()+"|"+getProductName()+"|"+getNumberofavailableitems()+"|"+getPrice()+"|"+getSize()+"|"+getColour()+"|"+getProductType());
     }
 }
