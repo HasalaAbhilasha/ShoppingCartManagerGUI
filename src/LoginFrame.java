@@ -78,7 +78,7 @@ public class LoginFrame extends JFrame {
 
             if (hashPassword(password).equals(hashedPassword)) {
                 JOptionPane.showMessageDialog(this, "Login Successful!");
-                openShoppingCartFrame();
+               WestminsterFrame();
             } else {
                 JOptionPane.showMessageDialog(this, "Incorrect Password. Please try again.");
             }
@@ -104,16 +104,20 @@ public class LoginFrame extends JFrame {
 
                 JOptionPane.showMessageDialog(this, "Account created successfully!");
                 dispose(); // Close the login frame
-                openShoppingCartFrame();
+                WestminsterFrame();
             }
         }
     }
 
-    private void openShoppingCartFrame() {
-        ShoppingCartFrame shoppingCartFrame = new ShoppingCartFrame(userCredentials);
-        shoppingCartFrame.setVisible(true);
-        dispose();
+    private void WestminsterFrame() {
+        // Assuming ShoppingCartFrame has a constructor that takes no arguments
+
+        WestminsterFrame westminsterFrame=new WestminsterFrame();
+        westminsterFrame.setVisible(true);
+        this.dispose(); // Close the LoginFrame
     }
+
+
 
     private String hashPassword(String password) {
         // In a real system, you would use a secure hashing algorithm, such as bcrypt or SHA-256

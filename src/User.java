@@ -2,9 +2,10 @@ import java.io.*;
 import java.util.HashMap;
 
 public class User implements Serializable {
+    public static Boolean isNewUser;
     private String username;
     private String password;
-    private boolean isNewUser;
+
 
     public User(String username, String password, boolean isNewUser) {
         this.username = username;
