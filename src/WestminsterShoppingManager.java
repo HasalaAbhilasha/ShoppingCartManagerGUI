@@ -13,34 +13,43 @@ public class WestminsterShoppingManager {
 
 
     // Method to initiate the shopping cart application
-    public static void runShoppingCart(){
+    public static void runShoppingCart() {
         loadFile(); // Load existing products from the file
-        while (true){
-            // Display menu options for user or manager
-            System.out.println("1.User");
-            System.out.println("2.Manager");
-            System.out.println("0.exit");
-            int number = input.nextInt();
-            switch (number){
-                case 0:
-                    return;
-                case 1:
-                    // Start the user interface for shopping
-                    SwingUtilities.invokeLater(() -> {
-                        HashMap<String, User> userCredentials = User.loadCredentialsFromFile();
-                        LoginFrame loginFrame = new LoginFrame(userCredentials);
-                        loginFrame.setVisible(true);
-                    });
-                    break;
-                case 2:
-                    // Access manager functionalities
-                    manager();
-                    break;
-                default:
-                    System.out.println("wrong input");
+
+        while (true) {
+            try {
+                // Display menu options for user or manager
+                System.out.println("1. User");
+                System.out.println("2. Manager");
+                System.out.println("0. Exit");
+                int number = input.nextInt();
+
+                switch (number) {
+                    case 0:
+                        return;
+                    case 1:
+                        // Start the user interface for shopping
+                        SwingUtilities.invokeLater(() -> {
+                            HashMap<String, User> userCredentials = User.loadCredentialsFromFile();
+                            LoginFrame loginFrame = new LoginFrame(userCredentials);
+                            loginFrame.setVisible(true);
+                        });
+                        break;
+                    case 2:
+                        // Access manager functionalities
+                        manager();
+                        break;
+                    default:
+                        System.out.println("Invalid input. Please enter 1, 2, or 0.");
+                }
+            } catch (java.util.InputMismatchException e) {
+                // Handle non-integer input
+                System.out.println("Invalid input. Please enter a number.");
+                input.next(); // Consume invalid input to avoid an infinite loop
             }
         }
     }
+
 
     // Method for manager functionalities
     private static void manager() {
