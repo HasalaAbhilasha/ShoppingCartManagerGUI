@@ -212,33 +212,33 @@ public class WestminsterFrame extends JFrame {
         model.setRowCount(0);
         ArrayList<Product> productList = getProductList(WestminsterShoppingManager.productList.getProductList(), dropdownOption);
 
-        for (Product product: productList){
-            System.out.println(product.displayProducts());
-            switch (product.getProductType()){
-                case "Electronics":
-                    Object[] rowDataElectronic = {
-                            product.getProductId(),
-                            product.getProductName(),
-                            product.getProductType(),
-                            product.getPrice(),
-                            product.getBrand() + ", "+
-                                    product.getWarrantyPeriod() +" months warranty"};
-                    model.addRow(rowDataElectronic);
-                    break;
-                case "Clothing":
-                    Object[] rowDataClothing = {
-                            product.getProductId(),
-                            product.getProductName(),
-                            product.getProductType(),
-                            product.getPrice(),
-                            product.getSize()+ ", "+ product.getColour()};
-                    model.addRow(rowDataClothing);
-                    break;
+        for (Product product : productList) {
+            Object[] rowData;
+
+            if (product.getNumberofavailableitems() < 3) {
+                // Apply red color formatting for items with stock less than 3
+                rowData = new Object[]{
+                        "<html><font color='red'>" + product.getProductId() + "</font></html>",
+                        "<html><font color='red'>" + product.getProductName() + "</font></html>",
+                        "<html><font color='red'>" + product.getProductType() + "</font></html>",
+                        "<html><font color='red'>" + product.getPrice() + "</font></html>",
+                        "<html><font color='red'>" + product.displayProducts() + "</font></html>"
+                };
+            } else {
+                // No red color formatting for items with stock 3 or more
+                rowData = new Object[]{
+                        product.getProductId(),
+                        product.getProductName(),
+                        product.getProductType(),
+                        product.getPrice(),
+                        product.displayProducts()
+                };
             }
+
+            model.addRow(rowData);
         }
-
-
     }
+
 
     public static void updateDisplayPanel(Product product){
         System.out.println(product.displayProducts());
