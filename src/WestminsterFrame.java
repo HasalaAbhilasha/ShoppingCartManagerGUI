@@ -21,6 +21,7 @@ public class WestminsterFrame extends JFrame {
     public static Product selectedProduct;
     public static JLabel idLabel, categoryLabel, nameLabel, availItemsLabel, extraLabel1, extraLabel2;
 
+
     public WestminsterFrame(){
         westminsterFrame.setSize(800,700);
         westminsterFrame.setLayout(new GridLayout(2,1));
@@ -129,7 +130,6 @@ public class WestminsterFrame extends JFrame {
                         }
                     }
 
-                    // If the product is not in the cart, add it with quantity 1
                     if (!productExists) {
                         selectedProduct.setNoOfItems(1);
                         usersShoppingCart.addProduct(selectedProduct);
@@ -159,7 +159,6 @@ public class WestminsterFrame extends JFrame {
         westminsterFrame.add(bottomPanel);
 
         westminsterFrame.setVisible(true);
-//        westminsterFrame.setDefaultCloseOperation(westminsterFrame.EXIT_ON_CLOSE);
     }
 
 
@@ -207,7 +206,6 @@ public class WestminsterFrame extends JFrame {
             Object[] rowData;
 
             if (product.getNumberofavailableitems() < 3) {
-                // Apply red color formatting for items with stock less than 3
                 rowData = new Object[]{
                         "<html><font color='red'>" + product.getProductId() + "</font></html>",
                         "<html><font color='red'>" + product.getProductName() + "</font></html>",
@@ -232,7 +230,6 @@ public class WestminsterFrame extends JFrame {
 
 
     public static void updateDisplayPanel(Product product){
-        System.out.println(product.displayProducts());
 
         idLabel.setText("Product ID - "+ product.getProductId());
         nameLabel.setText("Name - "+ product.getProductName());

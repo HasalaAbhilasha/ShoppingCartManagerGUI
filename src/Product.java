@@ -5,6 +5,7 @@ public abstract class Product implements Comparable<Product>{
     private double Price;
     private String productType;
 
+
     public Product(String productId,String productName,int numberofavailableitems,double price, String productType){
         this.ProductId = productId;
         this.ProductName = productName;
