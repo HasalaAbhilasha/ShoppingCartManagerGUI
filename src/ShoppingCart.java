@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 public class ShoppingCart {
     private ArrayList<Product> productList;
@@ -53,7 +54,7 @@ public class ShoppingCart {
     }
 
     public ArrayList<Product> getProductList() {
-        Collections.sort(productList);
+        Collections.sort(productList, Comparator.comparing(Product::getProductName));
         return productList;
     }
 

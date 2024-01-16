@@ -57,16 +57,7 @@ public class WestminsterFrame extends JFrame {
         extraLabel2.setBorder(emptyBorder);
 
 
-//        topPanel.setBackground(Color.red);
-//        bottomPanel.setBackground(Color.blue);
-//        mediaPanel.setBackground(Color.green);
-//
-//        mediaPanel1.setBackground(Color.green);
-//        mediaPanel2.setBackground(Color.cyan);
-//        mediaPanel3.setBackground(Color.green);
-//
-//        bottomPanel1.setBackground(Color.pink);
-//        bottomPanel2.setBackground(Color.magenta);
+
 
         JLabel topPanelText = new JLabel("Select Product Category");
         JLabel bottomPanelText = new JLabel("Selected Product - Details");
