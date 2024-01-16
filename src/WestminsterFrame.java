@@ -173,38 +173,38 @@ public class WestminsterFrame extends JFrame {
 
 
 
-    public static JTable createTable(ArrayList<Product> productList){
+    public static JTable createTable(ArrayList<Product> productList) {
         String[] columnNames = {"Product ID", "Name", "Category", "Price ($)", "Info"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
-        for (Product product: productList){
-//            System.out.println(product.displayProducts());
-            switch (product.getProductType()){
-                case "Electronics":
-                    Object[] rowDataElectronic = {
-                            product.getProductId(),
-                            product.getProductName(),
-                            product.getProductType(),
-                            product.getPrice(),
-                            product.getBrand() + ", "+
-                                    product.getWarrantyPeriod() +" months warranty"};
-                    model.addRow(rowDataElectronic);
-                    break;
-                case "Clothing":
-                    Object[] rowDataClothing = {
+        for (Product product : productList) {
+            Object[] rowData;
+
+            // Check if the item availability is less than 3 and set the color to red
+            if (product.getNumberofavailableitems() < 3) {
+                rowData = new Object[]{
+                        "<html><font color='red'>" + product.getProductId() + "</font></html>",
+                        "<html><font color='red'>" + product.getProductName() + "</font></html>",
+                        "<html><font color='red'>" + product.getProductType() + "</font></html>",
+                        "<html><font color='red'>" + product.getPrice() + "</font></html>",
+                        "<html><font color='red'>" + product.displayProducts() + "</font></html>"
+                };
+            } else {
+                rowData = new Object[]{
                         product.getProductId(),
                         product.getProductName(),
                         product.getProductType(),
                         product.getPrice(),
-                            product.getSize()+ ", "+ product.getColour()};
-                    model.addRow(rowDataClothing);
-                    break;
+                        product.displayProducts()
+                };
             }
+
+            model.addRow(rowData);
         }
 
         JTable table = new JTable(model);
         table.setDefaultEditor(Object.class, null);
-        return  table;
+        return table;
     }
 
     private void updateTableModel() {
