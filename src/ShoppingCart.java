@@ -3,50 +3,67 @@ import java.util.Collections;
 
 public class ShoppingCart {
     private ArrayList<Product> productList;
+    private double firstDisVal;
+    private double threeItemDisVal;
 
-//    public double totalCost;
-    public double firstDisVal;
-    public double threeItemDisVal;
-    public ShoppingCart(){
+    public ShoppingCart() {
         this.productList = new ArrayList<>();
     }
 
-    public void addProduct(Product product){
+    public void addProduct(Product product) {
         productList.add(product);
     }
-    public void removeProduct(Product product){
+
+    public void removeProduct(Product product) {
         productList.remove(product);
     }
-    public double totalCost(){
+
+    public double totalCost() {
         double totalCost = 0;
-        for (int i = 0; i < productList.size(); i++) {
-            System.out.println("Number of items - "+productList.get(i).getNumberofavailableitems());
-            totalCost = totalCost + productList.get(i).getPrice()*productList.get(i).getNumberofavailableitems();
+        for (Product product : productList) {
+            totalCost += product.getPrice() * product.getNumberofavailableitems();
         }
         return totalCost;
     }
-    public double firstDiscount(Boolean newAccount){
-        if (newAccount){
+
+    public double firstDiscount(boolean newAccount) {
+        if (newAccount) {
             firstDisVal = totalCost() * 0.1;
         }
-        System.out.println("firstDisVal - "+ firstDisVal);
         return firstDisVal;
     }
 
-    public double threeItemsDiscount(){
-         threeItemDisVal = totalCost()*0.2;
-        System.out.println("threeItemDisVal - " + threeItemDisVal);
+    public double threeItemsDiscount() {
+        int electronicCount = getProductCount("Electronics");
+        int clothingCount = getProductCount("Clothing");
+
+        // Check if the total count of Electronics or Clothing is greater than or equal to 3
+        if (electronicCount + clothingCount >= 3) {
+            threeItemDisVal = totalCost() * 0.2;
+        } else {
+            threeItemDisVal = 0;
+        }
+
         return threeItemDisVal;
     }
 
-    public double finalTotalValue(){
+    public double finalTotalValue() {
         double finalTotalValue = totalCost() - firstDisVal - threeItemDisVal;
-        System.out.println("finalTotalValue - "+ finalTotalValue);
-        System.out.println("totalCost - " + totalCost());
         return finalTotalValue;
     }
-    public ArrayList<Product> getProductList(){
+
+    public ArrayList<Product> getProductList() {
         Collections.sort(productList);
         return productList;
+    }
+
+    private int getProductCount(String category) {
+        int count = 0;
+        for (Product product : productList) {
+            if (product.getProductType().equals(category)) {
+                count += product.getNumberofavailableitems();
+            }
+        }
+        return count;
     }
 }

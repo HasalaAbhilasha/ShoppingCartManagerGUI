@@ -62,7 +62,7 @@ public class WestminsterShoppingManager {
             productFile.close();
             System.out.println("Products saved successfully in saveProducts.txt");
         } catch (IOException e) {
-            System.out.println("An error occured!");
+            System.out.println("An error occurred!");
         }
 
     }
@@ -139,7 +139,7 @@ public class WestminsterShoppingManager {
         } else if (productType == 2) {
             System.out.println("Enter the brand");
             String brand = input.next();
-            System.out.println("Enter the warrenty Period");
+            System.out.println("Enter the warranty Period");
             int warrentyperiod = input.nextInt();
 
             Electronics electronics = new Electronics(ProductId, ProductName, Numberofavailableitems, price, "Electronic", brand, warrentyperiod);

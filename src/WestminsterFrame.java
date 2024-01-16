@@ -107,7 +107,6 @@ public class WestminsterFrame extends JFrame {
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()){
                     int selectedRow = table.getSelectedRow();
-                    System.out.println("item selected "+ selectedRow);
                     if (selectedRow != -1) {
                         int modelRow = table.convertRowIndexToModel(selectedRow);
                         selectedProduct = getProductList(WestminsterShoppingManager.productList.getProductList(), dropdownOption).get(modelRow);
@@ -132,7 +131,6 @@ public class WestminsterFrame extends JFrame {
                     boolean productExists = false;
                     for (Product cartProduct : usersShoppingCart.getProductList()) {
                         if (cartProduct.getProductId().equals(selectedProduct.getProductId())) {
-                            // Increment the quantity if the product is already in the cart
                             int newQuantity = cartProduct.getNumberofavailableitems() + 1;
                             cartProduct.setNoOfItems(newQuantity);
                             productExists = true;
