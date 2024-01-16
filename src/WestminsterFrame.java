@@ -127,12 +127,30 @@ public class WestminsterFrame extends JFrame {
         addToCartButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (selectedProduct != null){
-                    usersShoppingCart.addProduct(selectedProduct);
-                    try{
+                if (selectedProduct != null) {
+                    // Check if the selected product is already in the cart
+                    boolean productExists = false;
+                    for (Product cartProduct : usersShoppingCart.getProductList()) {
+                        if (cartProduct.getProductId().equals(selectedProduct.getProductId())) {
+                            // Increment the quantity if the product is already in the cart
+                            int newQuantity = cartProduct.getNumberofavailableitems() + 1;
+                            cartProduct.setNoOfItems(newQuantity);
+                            productExists = true;
+                            break;
+                        }
+                    }
+
+                    // If the product is not in the cart, add it with quantity 1
+                    if (!productExists) {
+                        selectedProduct.setNoOfItems(1);
+                        usersShoppingCart.addProduct(selectedProduct);
+                    }
+
+                    try {
                         ShoppingCartFrame.updateInformation();
                         ShoppingCartFrame.updateTableModel();
-                    }catch(NullPointerException ignored){}
+                    } catch (NullPointerException ignored) {
+                    }
                 }
             }
         });

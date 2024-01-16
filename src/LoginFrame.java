@@ -78,7 +78,8 @@ public class LoginFrame extends JFrame {
 
             if (hashPassword(password).equals(hashedPassword)) {
                 JOptionPane.showMessageDialog(this, "Login Successful!");
-               WestminsterFrame();
+                dispose(); // Close the login frame
+                WestminsterFrame();
             } else {
                 JOptionPane.showMessageDialog(this, "Incorrect Password. Please try again.");
             }

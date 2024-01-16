@@ -177,7 +177,7 @@ public class WestminsterShoppingManager {
                         productList.addProduct(electronics);
                     }
                 }else{
-                    System.out.println("Invalide file format.");
+                    System.out.println("Invalid file format.");
                 }
             }
             System.out.println("Loaded products from the saved File");
