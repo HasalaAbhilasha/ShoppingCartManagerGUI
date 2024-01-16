@@ -8,11 +8,43 @@ import java.util.Scanner;
 
 public class WestminsterShoppingManager {
     public static ShoppingCart productList = new ShoppingCart();
+    // Scanner for user input
     private static Scanner input = new Scanner(System.in);
 
-    public static void main(String[] args) {
-        loadFile();
-        while (true) {
+
+    // Method to initiate the shopping cart application
+    public static void runShoppingCart(){
+        loadFile(); // Load existing products from the file
+        while (true){
+            // Display menu options for user or manager
+            System.out.println("1.User");
+            System.out.println("2.Manager");
+            System.out.println("0.exit");
+            int number = input.nextInt();
+            switch (number){
+                case 0:
+                    return;
+                case 1:
+                    // Start the user interface for shopping
+                    SwingUtilities.invokeLater(() -> {
+                        HashMap<String, User> userCredentials = User.loadCredentialsFromFile();
+                        LoginFrame loginFrame = new LoginFrame(userCredentials);
+                        loginFrame.setVisible(true);
+                    });
+                    break;
+                case 2:
+                    // Access manager functionalities
+                    manager();
+                    break;
+                default:
+                    System.out.println("wrong input");
+            }
+        }
+    }
+
+    // Method for manager functionalities
+    private static void manager() {
+        while (true) {//Display menu options for manager
             System.out.println("1.Add Product");
             System.out.println("2.remove Product");
             System.out.println("3.display all Products");
@@ -24,7 +56,6 @@ public class WestminsterShoppingManager {
             int number = input.nextInt();
             switch (number) {
                 case 0:
-
                     return;
                 case 1:
                     addProduct();
@@ -53,7 +84,7 @@ public class WestminsterShoppingManager {
     }
 
 
-    private static void savefile() {
+    private static void savefile() {//save the products in the file
         try {
             FileWriter productFile = new FileWriter("savedProduct.txt");
             for (int i = 0; i < productList.getProductList().size(); i++) {
@@ -68,7 +99,7 @@ public class WestminsterShoppingManager {
     }
 
 
-    private static void deleteProduct() {
+    private static void deleteProduct() {//delete the product
 
         System.out.println("Choose the product type");
         System.out.println("1.Clothing");
@@ -113,44 +144,54 @@ public class WestminsterShoppingManager {
 
     }
 
-    private static void addProduct() {
+    private static void addProduct() {//add the product
+        try {
+            System.out.println("Enter the productID, eg: #001");
+            String productId = input.next();
 
-        System.out.println("Enter the productID");
-        String ProductId = input.next();
-        System.out.println("Enter the product Name");
-        String ProductName = input.next();
-        System.out.println("Enter the NoOfItems");
-        int Numberofavailableitems = input.nextInt();
-        System.out.println("Enter the Price");
-        double price = input.nextDouble();
+            if (productId.charAt(0) != '#') {
+                System.out.println("Invalid Product ID. The first letter must start with #");
+                return;
+            }
 
-        System.out.println("Enter the products want");
-        System.out.println("1.Clothing");
-        System.out.println("2.Electronics");
-        int productType = input.nextInt();
-        if (productType == 1) {
-            System.out.println("Enter the size");
-            String size = input.next();
-            System.out.println("Enter the color");
-            String color = input.next();
+            System.out.println("Enter the product Name");
+            String productName = input.next();
+            System.out.println("Enter the NoOfItems");
+            int numberOfAvailableItems = input.nextInt();
+            System.out.println("Enter the Price");
+            double price = input.nextDouble();
 
-            Clothing clothing = new Clothing(ProductId, ProductName, Numberofavailableitems, price, "Clothing", size, color);
-            productList.addProduct(clothing);
-        } else if (productType == 2) {
-            System.out.println("Enter the brand");
-            String brand = input.next();
-            System.out.println("Enter the warranty Period");
-            int warrentyperiod = input.nextInt();
+            System.out.println("Enter the product type");
+            System.out.println("1. Clothing");
+            System.out.println("2. Electronics");
+            int productType = input.nextInt();
 
-            Electronics electronics = new Electronics(ProductId, ProductName, Numberofavailableitems, price, "Electronic", brand, warrentyperiod);
-            productList.addProduct(electronics);
-        } else {
-            System.out.println("Invalid product type");
+            if (productType == 1) {
+                System.out.println("Enter the size");
+                String size = input.next();
+                System.out.println("Enter the color");
+                String color = input.next();
+
+                Clothing clothing = new Clothing(productId, productName, numberOfAvailableItems, price, "Clothing", size, color);
+                productList.addProduct(clothing);
+            } else if (productType == 2) {
+                System.out.println("Enter the brand");
+                String brand = input.next();
+                System.out.println("Enter the warranty Period");
+                int warrantyPeriod = input.nextInt();
+
+                Electronics electronics = new Electronics(productId, productName, numberOfAvailableItems, price, "Electronic", brand, warrantyPeriod);
+                productList.addProduct(electronics);
+            } else {
+                System.out.println("Invalid product type");
+            }
+        } catch (Exception e) {
+            System.out.println("Error adding product: " + e.getMessage());
         }
-
     }
 
-    private static void displayProduct() {
+
+    private static void displayProduct() {//display the product
         if (productList.getProductList().isEmpty()) {
             System.out.println("Product cart is Empty");
         } else {
@@ -160,7 +201,7 @@ public class WestminsterShoppingManager {
         }
     }
 
-    public static void loadFile() {
+    public static void loadFile() {//load the products from the file
         try {
             File saveFile = new File("savedProduct.txt");
             Scanner fileReader = new Scanner(saveFile);

@@ -9,11 +9,10 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class WestminsterFrame extends JFrame {
+    // Shopping cart for the user
     public static ShoppingCart usersShoppingCart = new ShoppingCart();
-    public JFrame westminsterFrame = new JFrame("Westminster Shopping Center");
-    public static JPanel topPanel, bottomPanel,
-            mediaPanel, mediaPanel1, mediaPanel2, mediaPanel3,
-            bottomPanel1, bottomPanel2 ;
+
+    public static JPanel topPanel, bottomPanel, mediaPanel, mediaPanel1, mediaPanel2, mediaPanel3, bottomPanel1, bottomPanel2;
 
     public static JTable table;
     public static JScrollPane scrollPane;
@@ -21,34 +20,37 @@ public class WestminsterFrame extends JFrame {
     public static Product selectedProduct;
     public static JLabel idLabel, categoryLabel, nameLabel, availItemsLabel, extraLabel1, extraLabel2;
 
+    // Constructor for the WestminsterFrame
+    public WestminsterFrame() {
+        // Set up the main frame
+        setTitle("Westminster Shopping Center");
+        setSize(800, 700);
+        setLayout(new GridLayout(2, 1));
+        setLocationRelativeTo(null);
 
-    public WestminsterFrame(){
-        westminsterFrame.setSize(800,700);
-        westminsterFrame.setLayout(new GridLayout(2,1));
-
-        topPanel = new JPanel(new GridLayout(2,1));
-        bottomPanel = new JPanel(new GridLayout(1,2));
-        mediaPanel = new JPanel(new GridLayout(1,3));
-
+        // Create and configure panels for layout
+        topPanel = new JPanel(new GridLayout(2, 1));
+        bottomPanel = new JPanel(new GridLayout(1, 2));
+        mediaPanel = new JPanel(new GridLayout(1, 3));
         mediaPanel1 = new JPanel(new GridBagLayout());
         mediaPanel2 = new JPanel(new GridBagLayout());
         mediaPanel3 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-
         bottomPanel1 = new JPanel();
         bottomPanel2 = new JPanel();
 
-        bottomPanel1.setLayout(new BoxLayout(bottomPanel1, BoxLayout.Y_AXIS));
-
+        // Configure border for better spacing
         int marginSize = 7;
-        EmptyBorder emptyBorder = new EmptyBorder(marginSize, marginSize*4, marginSize, 0);
+        EmptyBorder emptyBorder = new EmptyBorder(marginSize, marginSize * 4, marginSize, 0);
 
+        // Labels for displaying product details
         idLabel = new JLabel("Product ID - ");
         nameLabel = new JLabel("Name - ");
-        categoryLabel = new JLabel("category -");
-        availItemsLabel = new JLabel("available label - ");
-        extraLabel1 = new JLabel("Size -");
-        extraLabel2 = new JLabel("Color - ");
+        categoryLabel = new JLabel("Category -");
+        availItemsLabel = new JLabel("Available Items - ");
+        extraLabel1 = new JLabel("Extra Info 1 -");
+        extraLabel2 = new JLabel("Extra Info 2 - ");
 
+        // Apply the empty border to the labels for consistent spacing
         bottomPanel1.setBorder(emptyBorder);
         idLabel.setBorder(emptyBorder);
         nameLabel.setBorder(emptyBorder);
@@ -57,22 +59,22 @@ public class WestminsterFrame extends JFrame {
         extraLabel1.setBorder(emptyBorder);
         extraLabel2.setBorder(emptyBorder);
 
-
-
-
+        // Text labels and dropdown menu for filtering products
         JLabel topPanelText = new JLabel("Select Product Category");
         JLabel bottomPanelText = new JLabel("Selected Product - Details");
-
         String[] dropdownList = {"All", "Electronic", "Clothing"};
         JComboBox<String> dropdownMenu = new JComboBox<>(dropdownList);
         dropdownMenu.setPrototypeDisplayValue("XXXXXXXXXXXXXXXXXX");
 
+        // Initialize dropdown option
         dropdownOption = (String) dropdownMenu.getSelectedItem();
 
+        // Buttons for shopping cart and adding to cart
         JButton shoppingCartButton = new JButton("Shopping Cart");
         JButton addToCartButton = new JButton("Add to Shopping Cart");
         bottomPanel2.add(addToCartButton);
 
+        // Organize components in media panel
         mediaPanel1.add(topPanelText);
         mediaPanel2.add(dropdownMenu);
         mediaPanel3.add(shoppingCartButton);
@@ -81,23 +83,26 @@ public class WestminsterFrame extends JFrame {
         mediaPanel.add(mediaPanel2);
         mediaPanel.add(mediaPanel3);
 
+        // Create and configure the product table
         table = createTable(WestminsterShoppingManager.productList.getProductList());
         scrollPane = new JScrollPane(table);
 
+        // Update dropdown option when selected
         dropdownMenu.addActionListener(e -> {
             dropdownOption = (String) dropdownMenu.getSelectedItem();
-            System.out.println(dropdownOption);
             updateTableModel();
             topPanel.revalidate();
         });
 
+        // Add components to top panel
         topPanel.add(mediaPanel);
         topPanel.add(scrollPane);
 
+        // Add a selection listener to the table
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                if (!e.getValueIsAdjusting()){
+                if (!e.getValueIsAdjusting()) {
                     int selectedRow = table.getSelectedRow();
                     if (selectedRow != -1) {
                         int modelRow = table.convertRowIndexToModel(selectedRow);
@@ -108,6 +113,7 @@ public class WestminsterFrame extends JFrame {
             }
         });
 
+        // Open shopping cart frame when the button is clicked
         shoppingCartButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -115,11 +121,11 @@ public class WestminsterFrame extends JFrame {
             }
         });
 
+        // Add product to the shopping cart when the button is clicked
         addToCartButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (selectedProduct != null) {
-                    // Check if the selected product is already in the cart
                     boolean productExists = false;
                     for (Product cartProduct : usersShoppingCart.getProductList()) {
                         if (cartProduct.getProductId().equals(selectedProduct.getProductId())) {
@@ -144,6 +150,7 @@ public class WestminsterFrame extends JFrame {
             }
         });
 
+        // Configure the bottom panel to display product details
         bottomPanel1.add(bottomPanelText);
         bottomPanel1.add(idLabel);
         bottomPanel1.add(categoryLabel);
@@ -152,17 +159,19 @@ public class WestminsterFrame extends JFrame {
         bottomPanel1.add(extraLabel2);
         bottomPanel1.add(availItemsLabel);
 
+        // Add panels to the bottom panel
         bottomPanel.add(bottomPanel1);
         bottomPanel.add(bottomPanel2);
 
-        westminsterFrame.add(topPanel);
-        westminsterFrame.add(bottomPanel);
+        // Add top and bottom panels to the main frame
+        add(topPanel);
+        add(bottomPanel);
 
-        westminsterFrame.setVisible(true);
+        // Set the frame visible
+        setVisible(true);
     }
 
-
-
+    // Helper method to create a table with product data
     public static JTable createTable(ArrayList<Product> productList) {
         String[] columnNames = {"Product ID", "Name", "Category", "Price ($)", "Info"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
@@ -197,6 +206,7 @@ public class WestminsterFrame extends JFrame {
         return table;
     }
 
+    // method to update the table model based on the selected category
     private void updateTableModel() {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0);
@@ -228,42 +238,42 @@ public class WestminsterFrame extends JFrame {
         }
     }
 
+    // method to update the display panel with selected product details
+    private void updateDisplayPanel(Product product) {
+        idLabel.setText("Product ID - " + product.getProductId());
+        nameLabel.setText("Name - " + product.getProductName());
+        categoryLabel.setText("Category - " + product.getProductType());
+        availItemsLabel.setText("Items available - " + product.getNumberofavailableitems());
 
-    public static void updateDisplayPanel(Product product){
-
-        idLabel.setText("Product ID - "+ product.getProductId());
-        nameLabel.setText("Name - "+ product.getProductName());
-        categoryLabel.setText("Category - "+ product.getProductType());
-        availItemsLabel.setText("Items available - "+ product.getNumberofavailableitems());
-
-        switch (product.getProductType()){
+        switch (product.getProductType()) {
             case "Electronics":
-                extraLabel1.setText("Brand - "+ product.getBrand());
-                extraLabel2.setText("Warranty Period - "+ product.getWarrantyPeriod());
+                extraLabel1.setText("Brand - " + product.getBrand());
+                extraLabel2.setText("Warranty Period - " + product.getWarrantyPeriod());
                 break;
             case "Clothing":
-                extraLabel1.setText("Size - "+ product.getSize());
-                extraLabel2.setText("Colour - "+ product.getColour());
+                extraLabel1.setText("Size - " + product.getSize());
+                extraLabel2.setText("Color - " + product.getColour());
                 break;
         }
-
     }
-    public static ArrayList<Product> getProductList(ArrayList<Product> productList, String dropdownOption){
+
+    // method to filter products based on the selected category
+    private ArrayList<Product> getProductList(ArrayList<Product> productList, String dropdownOption) {
         ArrayList<Product> selectedProductList = new ArrayList<>();
-        switch (dropdownOption){
+        switch (dropdownOption) {
             case "All":
                 selectedProductList = productList;
                 break;
             case "Electronic":
-                for (Product product: productList){
-                    if (product.getProductType().equals("Electronics")){
-                       selectedProductList.add(product);
+                for (Product product : productList) {
+                    if (product.getProductType().equals("Electronics")) {
+                        selectedProductList.add(product);
                     }
                 }
                 break;
             case "Clothing":
-                for (Product product: productList){
-                    if (product.getProductType().equals("Clothing")){
+                for (Product product : productList) {
+                    if (product.getProductType().equals("Clothing")) {
                         selectedProductList.add(product);
                     }
                 }

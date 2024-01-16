@@ -1,16 +1,11 @@
-// Clothing class, extends Product
 public class Clothing extends Product {
+    private String size;    // Size of the clothing item
+    private String colour;  // Colour of the clothing item
 
-    // Additional attributes for Clothing
-    private String size;
-    private String colour;
-
-    // Constructor to initialize Clothing attributes and call the superclass constructor
+    // Constructor for Clothing
     public Clothing(String productId, String productName, int numberofavailableitems, double price, String productType, String size, String colour) {
-        // Call the constructor of the superclass (Product)
+        // Call the constructor parent class
         super(productId, productName, numberofavailableitems, price, productType);
-
-        // Initialize Clothing-specific attributes
         this.colour = colour;
         this.size = size;
     }
@@ -28,15 +23,8 @@ public class Clothing extends Product {
     // Method to display Clothing product information
     @Override
     public String displayProducts() {
-        // Format and concatenate product information
         return (
-                getProductId() + "|" +
-                        getProductName() + "|" +
-                        getNumberofavailableitems() + "|" +
-                        getPrice() + "|" +
-                        getSize() + "|" +
-                        getColour() + "|" +
-                        getProductType()
+                getProductId() + "|" + getProductName() + "|" + getNumberofavailableitems() + "|" + getPrice() + "|" + getSize() + "|" + getColour() + "|" + getProductType()
         );
     }
 }

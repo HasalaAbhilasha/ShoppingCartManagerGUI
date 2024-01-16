@@ -13,11 +13,13 @@ public class ShoppingCartFrame extends JFrame {
     private static JLabel totalLabel, finalTotalLabel, firstDisLabel, threeItemsDisLabel,
             totalNumLabel, finalTotalNumLabel, firstDisNumLabel, threeItemsDisNumLabel;
     private JButton removeItemButton; // New Remove Item button
+    JButton purchaseButton = new JButton("Purchase");
 
     public ShoppingCartFrame() {
         shoppingCartFrame = new JFrame("Shopping Cart");
         shoppingCartFrame.setSize(600, 500);
         shoppingCartFrame.setLayout(new GridLayout(2, 1));
+        setLocationRelativeTo(null);
 
         shoppingCartTable = createTable(WestminsterFrame.usersShoppingCart.getProductList());
         JScrollPane shoppingCartPane = new JScrollPane(shoppingCartTable);
@@ -59,7 +61,13 @@ public class ShoppingCartFrame extends JFrame {
                 removeSelectedItem();
             }
         });
-
+        purchaseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                purchaseItems();
+            }
+        });
+        infoPanel1.add(purchaseButton);
         infoPanel1.add(removeItemButton); // Add the button to the infoPanel1
 
         informationPanel.add(infoPanel1);
@@ -74,7 +82,6 @@ public class ShoppingCartFrame extends JFrame {
                 DefaultTableModel model1 = (DefaultTableModel) shoppingCartTable.getModel();
                 Object quantity = model1.getValueAt(row, column);
                 System.out.println(quantity.toString());
-                // Get the relative Product object and update the quantity using the setter method
                 Product product = WestminsterFrame.usersShoppingCart.getProductList().get(row);
                 product.setNoOfItems(Integer.parseInt(quantity.toString()));
                 updateTableModel();
@@ -95,7 +102,6 @@ public class ShoppingCartFrame extends JFrame {
             // Update the quantity in the cart
             int newQuantity = selectedProduct.getNumberofavailableitems() - 1;
             if (newQuantity <= 0) {
-                // If the quantity becomes zero or negative, remove the product from the cart
                 WestminsterFrame.usersShoppingCart.removeProduct(selectedProduct);
             } else {
                 // Update the quantity
@@ -177,5 +183,32 @@ public class ShoppingCartFrame extends JFrame {
         threeItemsDisNumLabel.setText(Double.toString(WestminsterFrame.usersShoppingCart.threeItemsDiscount()));
 
         finalTotalNumLabel.setText(Double.toString(WestminsterFrame.usersShoppingCart.finalTotalValue()));
+    }
+
+    private void purchaseItems() {
+        // Iterate through the products in the cart and update the available quantity
+        for (Product cartProduct : WestminsterFrame.usersShoppingCart.getProductList()) {
+            Product availableProduct = getProductById(cartProduct.getProductId());
+            if (availableProduct != null) {
+                int newAvailableQuantity = availableProduct.getNumberofavailableitems() - cartProduct.getNumberofavailableitems();
+                availableProduct.setNoOfItems(newAvailableQuantity);
+            }
+        }
+
+        // Clear the cart after purchase
+        WestminsterFrame.usersShoppingCart.getProductList().clear();
+
+        // Update the table model and information
+        updateTableModel();
+        updateInformation();
+    }
+
+    private Product getProductById(String productId) {
+        for (Product availableProduct : WestminsterShoppingManager.productList.getProductList()) {
+            if (availableProduct.getProductId().equals(productId)) {
+                return availableProduct;
+            }
+        }
+        return null;
     }
 }

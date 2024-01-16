@@ -11,14 +11,17 @@ public class LoginFrame extends JFrame {
 
     private HashMap<String, User> userCredentials;
 
+    // Constructor for the LoginFrame
     public LoginFrame(HashMap<String, User> userCredentials) {
         this.userCredentials = userCredentials;
 
+        // Set up JFrame properties
         setTitle("User Login");
         setSize(300, 200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        // Create Swing components
         JLabel usernameLabel = new JLabel("Username:");
         JLabel passwordLabel = new JLabel("Password:");
         usernameField = new JTextField(15);
@@ -26,6 +29,7 @@ public class LoginFrame extends JFrame {
         loginButton = new JButton("Login");
         createAccountButton = new JButton("Create Account");
 
+        // Add action listeners to buttons
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -40,11 +44,13 @@ public class LoginFrame extends JFrame {
             }
         });
 
+        // Set up GroupLayout for layout management
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
 
+        // Define horizontal and vertical layout  refarance: stackoverflow.com
         layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -69,6 +75,7 @@ public class LoginFrame extends JFrame {
         );
     }
 
+    // Method to handle user login
     private void loginUser() {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
@@ -88,6 +95,7 @@ public class LoginFrame extends JFrame {
         }
     }
 
+    // Method to handle user account creation
     private void createAccount() {
         String newUsername = JOptionPane.showInputDialog(this, "Enter a new username:");
         if (newUsername != null && !newUsername.trim().isEmpty()) {
@@ -110,22 +118,19 @@ public class LoginFrame extends JFrame {
         }
     }
 
+    // Method to open WestminsterFrame (assumes a frame for the shopping functionality)
     private void WestminsterFrame() {
-        // Assuming ShoppingCartFrame has a constructor that takes no arguments
-
-        WestminsterFrame westminsterFrame=new WestminsterFrame();
+        WestminsterFrame westminsterFrame = new WestminsterFrame();
         westminsterFrame.setVisible(true);
         this.dispose(); // Close the LoginFrame
     }
 
-
-
+    // Method to hash a password (for simplicity, not secure for production)
     private String hashPassword(String password) {
-        // In a real system, you would use a secure hashing algorithm, such as bcrypt or SHA-256
-        // For simplicity, this example uses a basic hashing approach (not secure for production)
         return String.valueOf(password.hashCode());
     }
 
+    // Main method to run the Swing application
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             HashMap<String, User> userCredentials = User.loadCredentialsFromFile();

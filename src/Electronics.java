@@ -1,16 +1,13 @@
-// Electronics class, extends Product
 public class Electronics extends Product {
 
-    // Additional attributes for Electronics
-    private String brand;
-    private int warrantyPeriod;
+    private String brand;            // Brand of the electronic item
+    private int warrantyPeriod;      // Warranty period of the electronic item
 
-    // Constructor to initialize Electronics attributes and call the superclass constructor
+    // Constructor for Electronics
     public Electronics(String productId, String productName, int numberofavailableitems, double price, String productType, String brand, int warrantyPeriod) {
-        // Call the constructor of the superclass (Product)
+        // Call the constructor of parent class
         super(productId, productName, numberofavailableitems, price, productType);
 
-        // Initialize Electronics-specific attributes
         this.brand = brand;
         this.warrantyPeriod = warrantyPeriod;
     }
@@ -28,15 +25,8 @@ public class Electronics extends Product {
     // Method to display Electronics product information
     @Override
     public String displayProducts() {
-        // Format and concatenate product information
         return (
-                getProductId() + "|" +
-                        getProductName() + "|" +
-                        getNumberofavailableitems() + "|" +
-                        getPrice() + "|" +
-                        getBrand() + "|" +
-                        getWarrantyPeriod() + "|" +
-                        getProductType()
+                getProductId() + "|" + getProductName() + "|" + getNumberofavailableitems() + "|" + getPrice() + "|" + getBrand() + "|" + getWarrantyPeriod() + "|" + getProductType()
         );
     }
 }
