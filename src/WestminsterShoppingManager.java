@@ -19,6 +19,9 @@ public class WestminsterShoppingManager {
         while (true) {
             try {
                 // Display menu options for user or manager
+                System.out.println("Welcome to Westminster Shopping Manager!");
+                System.out.println("----------------------------------------");
+                System.out.println("What is your role?");
                 System.out.println("1. User");
                 System.out.println("2. Manager");
                 System.out.println("0. Exit");
@@ -165,7 +168,7 @@ public class WestminsterShoppingManager {
 
             System.out.println("Enter the product Name");
             String productName = input.next();
-            System.out.println("Enter the NoOfItems");
+            System.out.println("Enter the number of items");
             int numberOfAvailableItems = input.nextInt();
             System.out.println("Enter the Price");
             double price = input.nextDouble();
@@ -189,13 +192,14 @@ public class WestminsterShoppingManager {
                 System.out.println("Enter the warranty Period");
                 int warrantyPeriod = input.nextInt();
 
-                Electronics electronics = new Electronics(productId, productName, numberOfAvailableItems, price, "Electronic", brand, warrantyPeriod);
+                Electronics electronics = new Electronics(productId, productName, numberOfAvailableItems, price, "Electronics", brand, warrantyPeriod);
                 productList.addProduct(electronics);
             } else {
                 System.out.println("Invalid product type");
             }
+            System.out.println("Product added successfully!");
         } catch (Exception e) {
-            System.out.println("Error adding product: " + e.getMessage());
+            System.out.println("Invalid input. Please try again.");
         }
     }
 

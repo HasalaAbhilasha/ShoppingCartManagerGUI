@@ -1,10 +1,6 @@
-1|TV|4|200.0|Samsung|6|Electronics
-2|T-Shirt|2|30.0|XL|Black|Clothing
-3|Headphones|8|120.0|Sony|12|Electronics
-4|Jeans|6|45.0|32|Blue|Clothing
-5|Smartwatch|2|150.0|Apple|9|Electronics
-6|Sweater|7|55.0|M|Gray|Clothing
-7|LED TV|5|500.0|LG|10|Electronics
-8|Running Shoes|1|70.0|9|White|Clothing
-9|Bluetooth Speaker|10|80.0|JBL|8|Electronics
-10|Dress Shirt|3|35.0|L|White|Clothing
+#003|Fan|1|150.0|Philips|3|Electronics
+#006|Hat|6|15.0|S|Yellow|Clothing
+#005|Mobile|1|600.0|Apple|12|Electronics
+#004|Shirt|4|40.0|l|Red|Clothing
+#002|T-Shir|2|30.0|XL|Black|Clothing
+#001|TV|5|200.0|Samsung|6|Electronics

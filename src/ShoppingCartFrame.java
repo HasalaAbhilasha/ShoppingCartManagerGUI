@@ -11,9 +11,10 @@ public class ShoppingCartFrame extends JFrame {
     private static JTable shoppingCartTable;
     private static JPanel informationPanel, infoPanel1, infoPanel2;
     private static JLabel totalLabel, finalTotalLabel, firstDisLabel, threeItemsDisLabel,
-            totalNumLabel, finalTotalNumLabel, firstDisNumLabel, threeItemsDisNumLabel;
+            totalNumLabel, finalTotalNumLabel, firstDiscNumLabel, threeItemsDisNumLabel;
     private JButton removeItemButton; // New Remove Item button
     JButton purchaseButton = new JButton("Purchase");
+
 
     public ShoppingCartFrame() {
         shoppingCartFrame = new JFrame("Shopping Cart");
@@ -38,7 +39,7 @@ public class ShoppingCartFrame extends JFrame {
         threeItemsDisLabel = new JLabel("Three Items in the same Category Discount (20%)");
         totalNumLabel = new JLabel("88.79$");
         finalTotalNumLabel = new JLabel("60.05$");
-        firstDisNumLabel = new JLabel("8.58$");
+        firstDiscNumLabel = new JLabel("8.58$");
         threeItemsDisNumLabel = new JLabel("17.20$");
 
         infoPanel1.add(totalLabel);
@@ -48,7 +49,7 @@ public class ShoppingCartFrame extends JFrame {
         infoPanel1.add(new JLabel("")); // Placeholder for spacing
 
         infoPanel2.add(totalNumLabel);
-        infoPanel2.add(firstDisNumLabel);
+        infoPanel2.add(firstDiscNumLabel);
         infoPanel2.add(threeItemsDisNumLabel);
         infoPanel2.add(finalTotalNumLabel);
         infoPanel2.add(new JLabel("")); // Placeholder for spacing
@@ -179,7 +180,7 @@ public class ShoppingCartFrame extends JFrame {
 
     public static void updateInformation() {
         totalNumLabel.setText(Double.toString(WestminsterFrame.usersShoppingCart.totalCost()));
-        firstDisNumLabel.setText(Double.toString(WestminsterFrame.usersShoppingCart.firstDiscount(User.isNewUser)));
+        firstDiscNumLabel.setText(Double.toString(WestminsterFrame.usersShoppingCart.firstDiscount(User.isNewUser)));
         threeItemsDisNumLabel.setText(Double.toString(WestminsterFrame.usersShoppingCart.threeItemsDiscount()));
 
         finalTotalNumLabel.setText(Double.toString(WestminsterFrame.usersShoppingCart.finalTotalValue()));

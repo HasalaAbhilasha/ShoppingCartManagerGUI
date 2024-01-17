@@ -150,7 +150,9 @@ public class WestminsterFrame extends JFrame {
             }
         });
 
-        // Configure the bottom panel to display product details
+        // Configure the panel to display product details
+        bottomPanel1.setLayout(new GridLayout(0, 1)); // Set GridLayout with one column
+
         bottomPanel1.add(bottomPanelText);
         bottomPanel1.add(idLabel);
         bottomPanel1.add(categoryLabel);
@@ -158,6 +160,11 @@ public class WestminsterFrame extends JFrame {
         bottomPanel1.add(extraLabel1);
         bottomPanel1.add(extraLabel2);
         bottomPanel1.add(availItemsLabel);
+
+        bottomPanel2.setLayout(new BorderLayout());
+        bottomPanel2.add(BorderLayout.SOUTH,  addToCartButton);
+
+
 
         // Add panels to the bottom panel
         bottomPanel.add(bottomPanel1);
@@ -181,7 +188,7 @@ public class WestminsterFrame extends JFrame {
 
             // Check if the item availability is less than 3 and set the color to red
             if (product.getNumberofavailableitems() < 3) {
-                rowData = new Object[]{
+                rowData = new Object[]{    //reference from stackoverflow
                         "<html><font color='red'>" + product.getProductId() + "</font></html>",
                         "<html><font color='red'>" + product.getProductName() + "</font></html>",
                         "<html><font color='red'>" + product.getProductType() + "</font></html>",
@@ -216,7 +223,7 @@ public class WestminsterFrame extends JFrame {
             Object[] rowData;
 
             if (product.getNumberofavailableitems() < 3) {
-                rowData = new Object[]{
+                rowData = new Object[]{//reference from stackoverflow
                         "<html><font color='red'>" + product.getProductId() + "</font></html>",
                         "<html><font color='red'>" + product.getProductName() + "</font></html>",
                         "<html><font color='red'>" + product.getProductType() + "</font></html>",
@@ -239,23 +246,34 @@ public class WestminsterFrame extends JFrame {
     }
 
     // method to update the display panel with selected product details
+    // method to update the display panel with selected product details
     private void updateDisplayPanel(Product product) {
-        idLabel.setText("Product ID - " + product.getProductId());
-        nameLabel.setText("Name - " + product.getProductName());
-        categoryLabel.setText("Category - " + product.getProductType());
-        availItemsLabel.setText("Items available - " + product.getNumberofavailableitems());
+        // Clear existing labels
+        idLabel.setText("Product ID - ");
+        nameLabel.setText("Name - ");
+        categoryLabel.setText("Category - ");
+        availItemsLabel.setText("Items available - ");
+        extraLabel1.setText("");
+        extraLabel2.setText("");
+
+        // Update labels with selected product details
+        idLabel.setText(idLabel.getText() + product.getProductId());
+        nameLabel.setText(nameLabel.getText() + product.getProductName());
+        categoryLabel.setText(categoryLabel.getText() + product.getProductType());
+        availItemsLabel.setText(availItemsLabel.getText() + product.getNumberofavailableitems());
 
         switch (product.getProductType()) {
             case "Electronics":
-                extraLabel1.setText("Brand - " + product.getBrand());
-                extraLabel2.setText("Warranty Period - " + product.getWarrantyPeriod());
+                extraLabel1.setText(extraLabel1.getText() + "Brand - " + product.getBrand());
+                extraLabel2.setText(extraLabel2.getText() + "Warranty Period - " + product.getWarrantyPeriod());
                 break;
             case "Clothing":
-                extraLabel1.setText("Size - " + product.getSize());
-                extraLabel2.setText("Color - " + product.getColour());
+                extraLabel1.setText(extraLabel1.getText() + "Size - " + product.getSize());
+                extraLabel2.setText(extraLabel2.getText() + "Color - " + product.getColour());
                 break;
         }
     }
+
 
     // method to filter products based on the selected category
     private ArrayList<Product> getProductList(ArrayList<Product> productList, String dropdownOption) {
