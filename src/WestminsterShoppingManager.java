@@ -135,7 +135,7 @@ public class WestminsterShoppingManager {
                 break;
             case 2:
                 for (int i = 0; i < productList.getProductList().size(); i++) {
-                    if (productToDelete.equals(productList.getProductList().get(i).getProductId()) && productList.getProductList().get(i).getProductType().equals("Electronic")) {
+                    if (productToDelete.equals(productList.getProductList().get(i).getProductId()) && productList.getProductList().get(i).getProductType().equals("Electronics")) {
                         System.out.println(productList.getProductList().get(i).displayProducts());
                         productList.removeProduct(productList.getProductList().get(i));
                         deletedItem = true;
