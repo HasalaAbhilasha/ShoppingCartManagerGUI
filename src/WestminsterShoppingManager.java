@@ -29,7 +29,9 @@ public class WestminsterShoppingManager {
 
                 switch (number) {
                     case 0:
-                        return;
+                        // Exit the application
+                        System.out.println("Thank you for using Westminster Shopping Manager!");
+                        System.exit(0);
                     case 1:
                         // Start the user interface for shopping
                         SwingUtilities.invokeLater(() -> {
@@ -158,11 +160,19 @@ public class WestminsterShoppingManager {
 
     private static void addProduct() {//add the product
         try {
+            if (productList.getProductList().size() >= 50) {
+                System.out.println("Product cart is full");
+                return;
+            }
+
             System.out.println("Enter the productID, eg: #001");
             String productId = input.next();
 
             if (productId.charAt(0) != '#') {
-                System.out.println("Invalid Product ID. The first letter must start with #");
+                System.out.println("Invalid Product ID. The first letter must start with #, and it must be unique.");
+                return;
+            }else if (isProductIdDuplicate(productId)==true){
+                System.out.println("duplicate product ID");
                 return;
             }
 
@@ -170,8 +180,16 @@ public class WestminsterShoppingManager {
             String productName = input.next();
             System.out.println("Enter the number of items");
             int numberOfAvailableItems = input.nextInt();
+            if(numberOfAvailableItems<=0){
+                System.out.println("Invalid number of items");
+                return;
+            }
             System.out.println("Enter the Price");
             double price = input.nextDouble();
+            if(price<=0){
+                System.out.println("Invalid price");
+                return;
+            }
 
             System.out.println("Enter the product type");
             System.out.println("1. Clothing");
@@ -203,6 +221,14 @@ public class WestminsterShoppingManager {
         }
     }
 
+    private static boolean isProductIdDuplicate(String productId) {
+        for (Product product : productList.getProductList()) {
+            if (product.getProductId().equals(productId)) {
+                return true; // Found a duplicate
+            }
+        }
+        return false; // No duplicate found
+    }
 
     private static void displayProduct() {//display the product
         if (productList.getProductList().isEmpty()) {
